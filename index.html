@@ -439,7 +439,7 @@ function initClientNumber(){
  const status=document.getElementById("client-number-status");
  if(IS_ISOLATED_TEST){panel.hidden=true;return}
  const current=localStorage.getItem(CLIENT_NUMBER_KEY);
- if(current&&/^\\d{4}$/.test(current)){input.value=current;status.textContent="登録済み：NO "+current}
+ if(current&&/^[0-9]{4}$/.test(current)){input.value=current;status.textContent="登録済み：NO "+current}
  document.getElementById("client-number-save").addEventListener("click",()=>{
   const value=input.value.trim();
   if(!/^[0-9]{4}$/.test(value)){status.textContent="数字4桁で入力してください（例：0001）。";return}
