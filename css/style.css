@@ -350,12 +350,12 @@ body:has(#home-screen.active) .morning-bg{display:none}
 #home-screen #data-title{font-size:clamp(20px,5.3vw,25px)!important;white-space:nowrap;word-break:keep-all;letter-spacing:-.025em}
 
 /* FIX background asset: HOME and STEP 1-4; asset uploaded separately to images/morning-background.png. */
-.morning-bg{background:#f8f7f0 url('../images/morning-background.png') center top / cover no-repeat!important}
+.morning-bg{background:#d9eaf5 url('../images/dlt-hope-background.jpg') center center / cover no-repeat!important}
 .morning-bg::after,.morning-bg .morning-window,.morning-bg .morning-plant,.morning-bg .leaf{display:none!important}
 @media(min-width:650px){.morning-bg{background-position:center center}}
 
 /* FIX: uploaded morning image takes precedence over all obsolete HOME illustration layers. */
-body .morning-bg{display:block!important;position:fixed;inset:0;z-index:0;background:#f8f7f0 url('../images/morning-background.png') center top / cover no-repeat!important}
+body .morning-bg{display:block!important;position:fixed;inset:0;z-index:0;background:#d9eaf5 url('../images/dlt-hope-background.jpg') center center / cover no-repeat!important}
 .app-shell{position:relative;z-index:1}
 #home-screen::before{display:none!important}
 
