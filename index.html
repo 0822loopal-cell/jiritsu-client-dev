@@ -368,6 +368,10 @@ if(IS_ISOLATED_TEST){
    "寝室湿度："+fmt(last.bedroom?.humidity?.value),
    "寝室CO₂："+fmt(last.bedroom?.co2?.value),
    "今朝の感覚："+fmt(last.morning?.condition),
+   "DLT｜めまい："+fmt(last.dlt?.dizziness),
+   "DLT｜ふらつき："+fmt(last.dlt?.unsteadiness),
+   "DLT｜耳鳴り："+fmt(last.dlt?.tinnitus),
+   "DLT｜日常生活への影響："+fmt(last.dlt?.dailyImpact),
    "rPPG保存状態："+fmt(last.rppg?.status),
    "活動の目安："+fmt(last.output?.todayGuide)
   ].join("\n");
