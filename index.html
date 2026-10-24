@@ -484,7 +484,7 @@ function showHistory(){
  const records=[...savedRecords()].sort((a,b)=>Date.parse(b.recordedAt)-Date.parse(a.recordedAt));
  const box=document.getElementById("history-list");
  if(!records.length){box.innerHTML='<p class="today-copy">まだ保存された記録はありません。</p>'}
- else box.innerHTML=records.map(x=>{const m=x.morning?.condition||"未記録",s=x.sleep?.feeling||"未記録",r=x.rppg?.status==="valid"?`HR ${Math.round(x.rppg.hr)} / RMSSD ${Math.round(x.rppg.rmssd)} / SDNN ${Math.round(x.rppg.sdnn)}`:"測定なし・参考値";return `<div style="padding:12px 0;border-bottom:1px solid #eee"><strong>${formatRecordDate(x.recordedAt)}</strong><p class="today-copy">睡眠：${s}<br>今朝：${m}<br>カメラ：${r}</p></div>`}).join("");
+ else box.innerHTML=records.map(x=>{const m=x.morning?.condition||"未記録",s=x.sleep?.feeling||"未記録",r=x.rppg?.status==="valid"?`HR ${Math.round(x.rppg.hr)} / RMSSD ${Math.round(x.rppg.rmssd)} / SDNN ${Math.round(x.rppg.sdnn)}`:"測定なし・参考値";const score=v=>Number.isInteger(v)&&v>=0&&v<=4?String(v):"未記録";const d=x.dlt||{};return `<div style="padding:12px 0;border-bottom:1px solid #eee"><strong>${formatRecordDate(x.recordedAt)}</strong><p class="today-copy">睡眠：${s}<br>今朝：${m}<br>めまい：${score(d.dizziness)} / ふらつき：${score(d.unsteadiness)}<br>耳鳴り：${score(d.tinnitus)} / 日常生活への影響：${score(d.dailyImpact)}<br>カメラ：${r}</p></div>`}).join("");
  window.scrollTo(0,0);
 }
 const WEEKLY_NOTICE_KEY=STORAGE_KEY+"__weeklyNotice";
