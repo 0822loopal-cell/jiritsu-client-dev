@@ -64,6 +64,26 @@
         </div>
       </section>
 
+      <section class="card form-card" id="self-care-daily-record">
+        <p class="section-label">SELF CARE</p>
+        <h2>昨日のセルフケア・セルフリハ</h2>
+        <p class="helper">自律調整院から案内されたセルフケアについて選んでください。未選択は未記録として扱います。</p>
+        <p class="field-title">実施状況</p>
+        <div class="choice-grid single" data-group="self-care-status">
+          <button type="button" data-care="done">実施した</button>
+          <button type="button" data-care="not-done">実施しなかった</button>
+          <button type="button" data-care="no-instruction">指示なし</button>
+        </div>
+        <div id="self-care-response-wrap" hidden>
+          <p class="field-title">実施後の状態</p>
+          <div class="choice-grid single" data-group="self-care-response">
+            <button type="button" data-care="better">楽になった</button>
+            <button type="button" data-care="same">変わらない</button>
+            <button type="button" data-care="change">気になる変化があった</button>
+          </div>
+          <p class="helper">実施した場合のみ選択できます。未選択は未記録として扱います。</p>
+        </div>
+      </section>
       <section class="card form-card">
         <p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>DIFFERENCE</p><h2>いつもと違ったこと</h2><p class="helper">当てはまるものを選択できます</p>
         <div class="choice-grid multi" data-group="unusual">
@@ -206,9 +226,10 @@
       <section class="card today-card"><p class="section-label">01 RECORD</p><h2>記録状況</h2><p id="weekly-record" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">02 LIFE & FEELING</p><h2>生活と体感の推移</h2><p id="weekly-life" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">03 DLT SUPPORT</p><h2>症状と生活への影響</h2><p id="weekly-dlt" class="today-copy"></p></section>
-      <section class="card today-card"><p class="section-label">04 CAMERA</p><h2>カメラ測定値</h2><p id="weekly-camera" class="today-copy"></p></section>
-      <section class="card today-card"><p class="section-label">05 INSIGHT</p><h2>今週の気づき</h2><p id="weekly-insight" class="today-copy"></p></section>
-      <section class="card today-card emphasis"><p class="section-label">06 NEXT WEEK</p><h2>来週の過ごし方</h2><p id="weekly-next" class="today-copy"></p></section>
+      <section class="card today-card"><p class="section-label">04 SELF CARE</p><h2>セルフケア・セルフリハ</h2><p id="weekly-self-care" class="today-copy"></p></section>
+      <section class="card today-card"><p class="section-label">05 CAMERA</p><h2>カメラ測定値</h2><p id="weekly-camera" class="today-copy"></p></section>
+      <section class="card today-card"><p class="section-label">06 INSIGHT</p><h2>今週の気づき</h2><p id="weekly-insight" class="today-copy"></p></section>
+      <section class="card today-card emphasis"><p class="section-label">07 NEXT WEEK</p><h2>来週の過ごし方</h2><p id="weekly-next" class="today-copy"></p></section>
       <button id="share-weekly" class="primary-button" type="button">このサマリーを共有する <span aria-hidden="true">›</span></button>
       <p id="share-weekly-status" class="time-note"></p>
     </section>
@@ -381,6 +402,8 @@ if(IS_ISOLATED_TEST){
    "DLT｜ふらつき："+fmt(last.dlt?.unsteadiness),
    "DLT｜耳鳴り："+fmt(last.dlt?.tinnitus),
    "DLT｜日常生活への影響："+fmt(last.dlt?.dailyImpact),
+    "セルフケア｜実施状況："+fmt(last.selfCare?.status),
+    "セルフケア｜実施後の状態："+fmt(last.selfCare?.response),
    "rPPG保存状態："+fmt(last.rppg?.status),
    "活動の目安："+fmt(last.output?.todayGuide)
   ].join("\n");
@@ -488,6 +511,8 @@ function finishToday(){
   tinnitus:selectedScore("dlt-tinnitus"),
   dailyImpact:selectedScore("dlt-dailyImpact")
 },
+   selfCare:{status:document.querySelector('[data-group="self-care-status"] .selected')?.dataset.care||null,
+     response:document.querySelector('[data-group="self-care-status"] .selected')?.dataset.care==="done"?(document.querySelector('[data-group="self-care-response"] .selected')?.dataset.care||null):null},
   rppg:r?{hr:r.hr,meanPPI:r.meanPPI,rmssd:r.rmssd,sdnn:r.sdnn,acceptedPpi:r.acceptedPpi,rejectedPpi:r.rejectedPpi,quality:r.quality,frequencyPeak:r.frequencyPeak,status:r.quality==="良好"?"valid":"reference"}:{status:"missing"},
   output:{conditionText:document.getElementById("today-body").textContent,todayGuide:document.getElementById("today-guide").textContent,comparisonSnapshot:window.currentTodaySnapshot||null}
  };
@@ -588,9 +613,22 @@ function weeklySummaryText(){
   const first=values[0],last=values.at(-1),change=last-first;
   return name+"：記録"+values.length+"日 / 初回 "+first+" → 最新 "+last+"（"+(change<0?"負担が軽減":change>0?"負担が増加":"変化なし")+"）";
  }).join("。")+"。0＝負担なし、4＝負担が大きい。未記録日は補完していません。";
- return {record,life,dlt,camera,insight,next};
+  const statuses={done:0,"not-done":0,"no-instruction":0,missing:0};
+  const responses={better:0,same:0,change:0,missing:0};
+  for(const x of a){
+    const status=x.selfCare?.status;
+    if(status==="done"||status==="not-done"||status==="no-instruction")statuses[status]++;
+    else statuses.missing++;
+    if(status==="done"){
+      const response=x.selfCare?.response;
+      if(response==="better"||response==="same"||response==="change")responses[response]++;
+      else responses.missing++;
+    }
+  }
+  const selfCare=`実施した ${statuses.done}日 / 実施しなかった ${statuses["not-done"]}日 / 指示なし ${statuses["no-instruction"]}日 / 未記録 ${statuses.missing}日。実施後の状態：楽になった ${responses.better}日 / 変わらない ${responses.same}日 / 気になる変化があった ${responses.change}日 / 未記録 ${responses.missing}日。記録のない日は補完していません。`;
+  return {record,life,dlt,selfCare,camera,insight,next};
 }
-function renderWeekly(){const x=weeklySummaryText();document.getElementById("weekly-record").textContent=x.record;document.getElementById("weekly-life").textContent=x.life;document.getElementById("weekly-dlt").textContent=x.dlt;document.getElementById("weekly-camera").textContent=x.camera;document.getElementById("weekly-insight").textContent=x.insight;document.getElementById("weekly-next").textContent=x.next}
+function renderWeekly(){const x=weeklySummaryText();document.getElementById("weekly-record").textContent=x.record;document.getElementById("weekly-life").textContent=x.life;document.getElementById("weekly-dlt").textContent=x.dlt;document.getElementById("weekly-self-care").textContent=x.selfCare;document.getElementById("weekly-camera").textContent=x.camera;document.getElementById("weekly-insight").textContent=x.insight;document.getElementById("weekly-next").textContent=x.next}
 function showWeekly(){
  hideMainScreens();
  document.getElementById("weekly-screen").classList.add("active");
@@ -607,7 +645,7 @@ function weeklyShareText(){
  const meta=["データ形式：JIRITSU-WEEKLY-V1",clientLine];
  if(p)meta.push("集計期間："+isoDay(p.startDay)+"〜"+isoDay(p.endDay),"集計週：第"+(p.weekIndex+1)+"週");
  else meta.push("集計期間：未確定","集計週：未確定");
- return ["朝のコンディション｜週間サマリー",meta.join("\n"),"① 記録状況\n"+x.record,"② 生活と体感の推移\n"+x.life,"③ DLT｜症状と生活への影響\n"+x.dlt,"④ カメラ測定値\n"+x.camera,"⑤ 今週の気づき\n"+x.insight,"⑥ 来週の過ごし方\n"+x.next].join("\n\n");
+ return ["朝のコンディション｜週間サマリー",meta.join("\n"),"① 記録状況\n"+x.record,"② 生活と体感の推移\n"+x.life,"③ DLT｜症状と生活への影響\n"+x.dlt,"④ セルフケア・セルフリハ\n"+x.selfCare,"⑤ カメラ測定値\n"+x.camera,"⑥ 今週の気づき\n"+x.insight,"⑦ 来週の過ごし方\n"+x.next].join("\n\n");
 }
 async function shareWeekly(){const text=weeklyShareText(),status=document.getElementById("share-weekly-status");try{if(navigator.share){await navigator.share({title:"朝のコンディション｜週間サマリー",text});status.textContent="共有先の選択は端末側で行います。"}else if(navigator.clipboard){await navigator.clipboard.writeText(text);status.textContent="サマリーをコピーしました。メールやLINEに貼り付けて共有できます。"}else{status.textContent="この環境では共有機能を利用できません。"}}catch(e){if(e?.name!=="AbortError")status.textContent="共有を開始できませんでした。もう一度お試しください。"}}
 document.getElementById("weekly-notice-open").addEventListener("click",showWeekly);
@@ -679,6 +717,11 @@ function showToday(){window.stopRppgCamera?.();step4.classList.remove("active");
 function backToStep4(){todayScreen.classList.remove("active");step4.classList.add("active");window.scrollTo(0,0)}
 document.getElementById("start-record").addEventListener("click",showStep1);document.getElementById("back-home").addEventListener("click",showHome);document.querySelector(".next-button").addEventListener("click",showStep2);document.getElementById("back-step1").addEventListener("click",backToStep1);document.getElementById("to-step3").addEventListener("click",showStep3);document.getElementById("back-step2").addEventListener("click",backToStep2);document.getElementById("to-step4").addEventListener("click",showStep4);document.getElementById("back-step3").addEventListener("click",backToStep3);document.getElementById("show-today").addEventListener("click",showToday);document.getElementById("skip-measurement").addEventListener("click",()=>{window.currentRPPG=null;showToday()});document.getElementById("back-step4").addEventListener("click",backToStep4);
 document.querySelectorAll(".choice-grid.single").forEach(g=>g.addEventListener("click",e=>{const button=e.target.closest("button");if(!button||!g.contains(button))return;g.querySelectorAll("button").forEach(b=>b.classList.remove("selected"));button.classList.add("selected");checkReady()}));
+ document.querySelector('[data-group="self-care-status"]').addEventListener("click",()=>{
+   const done=document.querySelector('[data-group="self-care-status"] .selected')?.dataset.care==="done";
+   document.getElementById("self-care-response-wrap").hidden=!done;
+   if(!done)document.querySelectorAll('[data-group="self-care-response"] button').forEach(b=>b.classList.remove("selected"));
+ });
 document.querySelectorAll(".choice-grid.multi").forEach(g=>g.addEventListener("click",e=>{const button=e.target.closest("button");if(!button||!g.contains(button))return;const b=button;if(b.dataset.none){g.querySelectorAll("button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")}else{g.querySelector("[data-none]").classList.remove("selected");b.classList.toggle("selected")}checkReady()}));
 document.querySelectorAll('input[type="time"]').forEach(i=>i.addEventListener("change",checkReady));
 function checkReady(){const ok=["activity","sleep"].every(n=>document.querySelector('[data-group="'+n+'"] .selected'))&&document.getElementById("bed-time").value&&document.getElementById("wake-time").value;document.querySelector(".next-button").disabled=!ok}
