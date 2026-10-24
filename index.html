@@ -104,7 +104,56 @@
       <section class="card form-card"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3Z"/></svg></span>FEELING</p><h2>今朝もっとも近い感じ</h2><p class="helper">任意・1つだけ選べます</p>
         <div class="choice-grid single" data-group="morning-feeling"><button type="button">いつも通り</button><button type="button">眠い</button><button type="button">身体が重い</button><button type="button">頭がスッキリしない</button><button type="button">気分が乗らない</button><button type="button">その他</button></div>
       </section>
-      <section id="safety-gate" class="card form-card safety-gate" hidden><p class="section-label"><span class="section-icon" aria-hidden="true">!</span>CHECK</p><h2>いつもと違う、強い不調がありますか？</h2>
+      <section class="card form-card" id="dlt-daily-record">
+        <p class="section-label">DLT SUPPORT</p>
+        <h2>今日の症状と生活への影響</h2>
+        <p class="helper">0＝負担なし、4＝負担が大きい。未選択は未記録として扱います。</p>
+
+        <div class="dlt-rating">
+          <p class="field-title">めまい</p>
+          <div class="choice-grid single" data-group="dlt-dizziness">
+            <button type="button" data-score="0">0</button>
+            <button type="button" data-score="1">1</button>
+            <button type="button" data-score="2">2</button>
+            <button type="button" data-score="3">3</button>
+            <button type="button" data-score="4">4</button>
+          </div>
+        </div>
+
+        <div class="dlt-rating">
+          <p class="field-title">ふらつき</p>
+          <div class="choice-grid single" data-group="dlt-unsteadiness">
+            <button type="button" data-score="0">0</button>
+            <button type="button" data-score="1">1</button>
+            <button type="button" data-score="2">2</button>
+            <button type="button" data-score="3">3</button>
+            <button type="button" data-score="4">4</button>
+          </div>
+        </div>
+
+        <div class="dlt-rating">
+          <p class="field-title">耳鳴り</p>
+          <div class="choice-grid single" data-group="dlt-tinnitus">
+            <button type="button" data-score="0">0</button>
+            <button type="button" data-score="1">1</button>
+            <button type="button" data-score="2">2</button>
+            <button type="button" data-score="3">3</button>
+            <button type="button" data-score="4">4</button>
+          </div>
+        </div>
+
+        <div class="dlt-rating">
+          <p class="field-title">日常生活への影響</p>
+          <div class="choice-grid single" data-group="dlt-dailyImpact">
+            <button type="button" data-score="0">0</button>
+            <button type="button" data-score="1">1</button>
+            <button type="button" data-score="2">2</button>
+            <button type="button" data-score="3">3</button>
+            <button type="button" data-score="4">4</button>
+          </div>
+        </div>
+      </section>
+<section id="safety-gate" class="card form-card safety-gate" hidden><p class="section-label"><span class="section-icon" aria-hidden="true">!</span>CHECK</p><h2>いつもと違う、強い不調がありますか？</h2>
         <div class="choice-grid single" data-group="strong-symptom"><button type="button">ない</button><button type="button">ある</button></div>
       </section>
       <button class="primary-button" type="button" id="to-step4" disabled>次へ</button><p class="time-note">次は「rPPG測定」です</p>
@@ -286,7 +335,7 @@ document.getElementById("detail-toggle").addEventListener("click",()=>{
 });
 // Test mode uses a completely separate storage key. Never mix test records with user records.
 const IS_ISOLATED_TEST=new URLSearchParams(location.search).get("isolatedTest")==="1";
-const STORAGE_KEY=IS_ISOLATED_TEST?"__sleepConditionIsolatedAppTest__":"sleepConditionAppV01";
+const STORAGE_KEY=IS_ISOLATED_TEST?"__jiritsuClientDevIsolatedTest__":"jiritsuClientDevV01";
 if(IS_ISOLATED_TEST){
  const savePanel=document.getElementById("isolated-save-failure");
  savePanel.hidden=false;
@@ -377,6 +426,9 @@ function savedRecords(){
 }
 function selectedValue(group){
  return document.querySelector('[data-group="'+group+'"] .selected')?.textContent.trim()||null;
+}function selectedScore(group){
+  const button=document.querySelector('[data-group="'+group+'"] .selected');
+  return button ? Number(button.dataset.score) : null;
 }
 function optionalNumber(id){
  const el=document.getElementById(id);
@@ -395,7 +447,12 @@ function finishToday(){
   yesterday:{mainActivity:selectedValue("activity"),unusual:[...document.querySelectorAll('[data-group="unusual"] .selected')].map(x=>x.textContent.trim())},
   sleep:{feeling:selectedValue("sleep"),timeInBed:document.getElementById("bed-time").value,wakeTime:document.getElementById("wake-time").value},
   bedroom:{temperature:{value:optionalNumber("room-temp"),source:"manual"},humidity:{value:optionalNumber("room-humidity"),source:"manual"},co2:{value:optionalNumber("room-co2"),source:"manual"}},
-  morning:{condition:feeling,feelingTag:selectedValue("morning-feeling"),strongSymptom:selectedValue("strong-symptom")},
+  morning:{condition:feeling,feelingTag:selectedValue("morning-feeling"),strongSymptom:selectedValue("strong-symptom")},dlt:{
+  dizziness:selectedScore("dlt-dizziness"),
+  unsteadiness:selectedScore("dlt-unsteadiness"),
+  tinnitus:selectedScore("dlt-tinnitus"),
+  dailyImpact:selectedScore("dlt-dailyImpact")
+},
   rppg:r?{hr:r.hr,meanPPI:r.meanPPI,rmssd:r.rmssd,sdnn:r.sdnn,acceptedPpi:r.acceptedPpi,rejectedPpi:r.rejectedPpi,quality:r.quality,frequencyPeak:r.frequencyPeak,status:r.quality==="良好"?"valid":"reference"}:{status:"missing"},
   output:{conditionText:document.getElementById("today-body").textContent,todayGuide:document.getElementById("today-guide").textContent,comparisonSnapshot:window.currentTodaySnapshot||null}
  };
