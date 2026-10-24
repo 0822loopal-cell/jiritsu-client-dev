@@ -197,9 +197,10 @@
       <p class="flow-intro">直近7日間の記録をもとに振り返ります。記録がない日は推測で補いません。</p>
       <section class="card today-card"><p class="section-label">01 RECORD</p><h2>記録状況</h2><p id="weekly-record" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">02 LIFE & FEELING</p><h2>生活と体感の推移</h2><p id="weekly-life" class="today-copy"></p></section>
-      <section class="card today-card"><p class="section-label">03 CAMERA</p><h2>カメラ測定値</h2><p id="weekly-camera" class="today-copy"></p></section>
-      <section class="card today-card"><p class="section-label">04 INSIGHT</p><h2>今週の気づき</h2><p id="weekly-insight" class="today-copy"></p></section>
-      <section class="card today-card emphasis"><p class="section-label">05 NEXT WEEK</p><h2>来週の過ごし方</h2><p id="weekly-next" class="today-copy"></p></section>
+      <section class="card today-card"><p class="section-label">03 DLT SUPPORT</p><h2>症状と生活への影響</h2><p id="weekly-dlt" class="today-copy"></p></section>
+      <section class="card today-card"><p class="section-label">04 CAMERA</p><h2>カメラ測定値</h2><p id="weekly-camera" class="today-copy"></p></section>
+      <section class="card today-card"><p class="section-label">05 INSIGHT</p><h2>今週の気づき</h2><p id="weekly-insight" class="today-copy"></p></section>
+      <section class="card today-card emphasis"><p class="section-label">06 NEXT WEEK</p><h2>来週の過ごし方</h2><p id="weekly-next" class="today-copy"></p></section>
       <button id="share-weekly" class="primary-button" type="button">このサマリーを共有する <span aria-hidden="true">›</span></button>
       <p id="share-weekly-status" class="time-note"></p>
     </section>
@@ -536,9 +537,17 @@ function weeklySummaryText(){
  let insight="まだ十分な記録がありません。記録を続けることで、生活と体感の関係を振り返りやすくなります。";
  if(a.length>=4) insight=first===last?`本人感覚は週の初めと直近で「${last}」でした。睡眠や活動と合わせて、同じ感覚の日の条件を見比べてみましょう。`:`本人感覚は週の初めの「${first}」から、直近は「${last}」でした。睡眠・活動の記録と一緒に変化した条件を確認してみましょう。`;
  const next=a.length>=4?"今週の記録で調子がよかった日の睡眠や活動を一つ選び、来週も無理なく再現できる条件を試してみましょう。":"まずは無理のない範囲で朝の記録を続け、あなた自身の比較材料を増やしていきましょう。";
- return {record,life,camera,insight,next};
+ const dltNames=[["dizziness","めまい"],["unsteadiness","ふらつき"],["tinnitus","耳鳴り"],["dailyImpact","日常生活への影響"]];
+ const dlt=dltNames.map(([key,name])=>{
+  const values=a.map(x=>x.dlt?.[key]).filter(v=>Number.isInteger(v)&&v>=0&&v<=4);
+  if(!values.length)return name+"：記録なし";
+  if(values.length===1)return name+"：記録1日（"+values[0]+"）・推移は未判定";
+  const first=values[0],last=values.at(-1),change=last-first;
+  return name+"：記録"+values.length+"日 / 初回 "+first+" → 最新 "+last+"（"+(change<0?"負担が軽減":change>0?"負担が増加":"変化なし")+"）";
+ }).join("。")+"。0＝負担なし、4＝負担が大きい。未記録日は補完していません。";
+ return {record,life,dlt,camera,insight,next};
 }
-function renderWeekly(){const x=weeklySummaryText();document.getElementById("weekly-record").textContent=x.record;document.getElementById("weekly-life").textContent=x.life;document.getElementById("weekly-camera").textContent=x.camera;document.getElementById("weekly-insight").textContent=x.insight;document.getElementById("weekly-next").textContent=x.next}
+function renderWeekly(){const x=weeklySummaryText();document.getElementById("weekly-record").textContent=x.record;document.getElementById("weekly-life").textContent=x.life;document.getElementById("weekly-dlt").textContent=x.dlt;document.getElementById("weekly-camera").textContent=x.camera;document.getElementById("weekly-insight").textContent=x.insight;document.getElementById("weekly-next").textContent=x.next}
 function showWeekly(){
  hideMainScreens();
  document.getElementById("weekly-screen").classList.add("active");
@@ -547,7 +556,7 @@ function showWeekly(){
  markWeeklyNoticeChecked();
  window.scrollTo(0,0);
 }
-function weeklyShareText(){const x=weeklySummaryText();return ["朝のコンディション｜週間サマリー","① 記録状況\n"+x.record,"② 生活と体感の推移\n"+x.life,"③ カメラ測定値\n"+x.camera,"④ 今週の気づき\n"+x.insight,"⑤ 来週の過ごし方\n"+x.next].join("\n\n")}
+function weeklyShareText(){const x=weeklySummaryText();return ["朝のコンディション｜週間サマリー","① 記録状況\n"+x.record,"② 生活と体感の推移\n"+x.life,"③ DLT｜症状と生活への影響\n"+x.dlt,"④ カメラ測定値\n"+x.camera,"⑤ 今週の気づき\n"+x.insight,"⑥ 来週の過ごし方\n"+x.next].join("\n\n")}
 async function shareWeekly(){const text=weeklyShareText(),status=document.getElementById("share-weekly-status");try{if(navigator.share){await navigator.share({title:"朝のコンディション｜週間サマリー",text});status.textContent="共有先の選択は端末側で行います。"}else if(navigator.clipboard){await navigator.clipboard.writeText(text);status.textContent="サマリーをコピーしました。メールやLINEに貼り付けて共有できます。"}else{status.textContent="この環境では共有機能を利用できません。"}}catch(e){if(e?.name!=="AbortError")status.textContent="共有を開始できませんでした。もう一度お試しください。"}}
 document.getElementById("weekly-notice-open").addEventListener("click",showWeekly);
 document.getElementById("weekly-notice-later").addEventListener("click",()=>{document.getElementById("weekly-notice").hidden=true;});document.getElementById("nav-history").addEventListener("click",showHistory);
