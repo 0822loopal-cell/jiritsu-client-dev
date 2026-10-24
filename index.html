@@ -33,6 +33,14 @@
   <button id="weekly-notice-later" class="secondary-button" type="button">あとで見る</button>
 </section>
       <section id="isolated-preview" class="card data-card" hidden><p class="section-label">TEST ONLY</p><h2>架空データでTODAYを確認</h2><p class="helper">保存記録は変更しません。架空の過去7日・14日と今朝の測定値を使います。</p><button id="preview-7" class="secondary-button" type="button">7日分でTODAYを表示</button><button id="preview-14" class="secondary-button" type="button">14日分でTODAYを表示</button></section>
+      <section id="client-number-panel" class="card data-card" aria-labelledby="client-number-title">
+        <p class="section-label">JIRITSU SUPPORT</p><h2 id="client-number-title">クライアントNO</h2>
+        <p class="helper">自律調整院から案内された4桁の番号を登録してください。朝の記録には影響しません。</p>
+        <label for="client-number-input">4桁の番号</label>
+        <input id="client-number-input" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" placeholder="例：0001" style="width:100%;padding:14px;border:1px solid #b6cbd6;border-radius:12px;font-size:18px;letter-spacing:.2em">
+        <button id="client-number-save" class="secondary-button" type="button">番号を登録する</button>
+        <p id="client-number-status" class="helper" role="status" aria-live="polite"></p>
+      </section>
       <section id="isolated-backup" class="card data-card"><h2>記録のバックアップ・復元</h2><p class="helper">現在開いているモードの記録だけを扱います。書き出したファイルには体調などの個人情報が含まれます。第三者に共有しないでください。</p><button id="test-export" class="secondary-button" type="button">記録を書き出す</button><label for="test-import-file">記録のファイルを選ぶ</label><input id="test-import-file" type="file" accept=".json,application/json"><button id="test-import" class="secondary-button" type="button">選択ファイルを確認する</button><p id="test-backup-status" class="helper" aria-live="polite"></p></section>
       <section id="isolated-save-failure" class="card data-card" hidden><p class="section-label">TEST ONLY</p><h2>保存エラー検証</h2><p class="helper">次の保存操作を1回だけ失敗させます。既存の記録は変更しません。</p><button id="arm-save-failure" class="secondary-button" type="button">次の保存を失敗させる</button><p id="save-failure-arm-status" class="helper" aria-live="polite">未設定</p></section>
       <section id="isolated-pace-preview" class="card data-card" hidden><p class="section-label">TEST ONLY</p><h2>活動目安A・B・Cの表示確認</h2><p class="helper">架空の14日分と今朝の測定値で確認します。保存は行いません。</p><button id="preview-pace-a" class="secondary-button" type="button">A：通常範囲</button><button id="preview-pace-b" class="secondary-button" type="button">B：1項目に変化</button><button id="preview-pace-c" class="secondary-button" type="button">C：複数項目の変化が継続</button></section>
@@ -423,6 +431,28 @@ if(IS_ISOLATED_TEST){
   }catch(e){status.textContent="復元していません／確認が必要です："+e.message}
  });
 }
+// Facility-issued client number is stored separately from daily records.
+const CLIENT_NUMBER_KEY="jiritsuClientDevClientNumberV1";
+function initClientNumber(){
+ const panel=document.getElementById("client-number-panel");
+ const input=document.getElementById("client-number-input");
+ const status=document.getElementById("client-number-status");
+ if(IS_ISOLATED_TEST){panel.hidden=true;return}
+ const current=localStorage.getItem(CLIENT_NUMBER_KEY);
+ if(current&&/^\\d{4}$/.test(current)){input.value=current;status.textContent="登録済み：NO "+current}
+ document.getElementById("client-number-save").addEventListener("click",()=>{
+  const value=input.value.trim();
+  if(!/^[0-9]{4}$/.test(value)){status.textContent="数字4桁で入力してください（例：0001）。";return}
+  const previous=localStorage.getItem(CLIENT_NUMBER_KEY);
+  if(previous&&previous!==value&&!confirm("登録番号を "+previous+" から "+value+" に変更しますか？"))return;
+  try{
+   localStorage.setItem(CLIENT_NUMBER_KEY,value);
+   if(localStorage.getItem(CLIENT_NUMBER_KEY)!==value)throw Error("保存確認失敗");
+   status.textContent="登録済み：NO "+value;
+  }catch(e){status.textContent="番号を保存できませんでした。ブラウザの保存設定をご確認ください。"}
+ });
+}
+initClientNumber();
 let simulateSaveFailureOnce=false;
 let previewRecords=null;
 function savedRecords(){
