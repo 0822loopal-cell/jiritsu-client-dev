@@ -33,7 +33,7 @@
   <button id="weekly-notice-open" class="primary-button" type="button">週間サマリーを見る <span aria-hidden="true">›</span></button>
   <button id="weekly-notice-later" class="secondary-button" type="button">あとで見る</button>
 </section>
-      <section id="isolated-preview" class="card data-card" hidden><p class="section-label">TEST ONLY</p><h2>架空データでTODAYを確認</h2><p class="helper">保存記録は変更しません。架空の過去7日・14日と今朝の測定値を使います。</p><button id="preview-7" class="secondary-button" type="button">7日分でTODAYを表示</button><button id="preview-14" class="secondary-button" type="button">14日分でTODAYを表示</button></section>
+      <section id="isolated-preview" class="card data-card" hidden><p class="section-label">TEST ONLY</p><h2>架空データでTODAYを確認</h2><p class="helper">保存記録は変更しません。架空の過去7日・14日と今朝の測定値を使います。</p><button id="preview-7" class="secondary-button" type="button">7日分でTODAYを表示</button><button id="preview-14" class="secondary-button" type="button">14日分でTODAYを表示</button><button id="preview-week2" class="secondary-button" type="button">第2週（10/30〜11/5）のDLT架空データを表示</button></section>
       <section id="client-number-panel" class="card data-card" aria-labelledby="client-number-title">
         <p class="section-label">JIRITSU SUPPORT</p><h2 id="client-number-title">クライアントNO</h2>
         <p class="helper">自律調整院から案内された4桁の番号を登録してください。朝の記録には影響しません。</p>
@@ -479,6 +479,7 @@ function initClientNumber(){
 initClientNumber();
 let simulateSaveFailureOnce=false;
 let previewRecords=null;
+ let previewWeekOverride=null;
 function savedRecords(){
  if(IS_ISOLATED_TEST && previewRecords)return previewRecords;
  try{const a=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");return Array.isArray(a)?a:[]}catch{return []}
@@ -579,6 +580,7 @@ function markWeeklyNoticeChecked(){
  if(state.periodKey)localStorage.setItem(WEEKLY_NOTICE_KEY,state.periodKey);
  document.getElementById("weekly-notice").hidden=true;
 }function weeklyPeriod(){
+  if(IS_ISOLATED_TEST&&previewWeekOverride)return previewWeekOverride;
  const records=savedRecords().filter(x=>Number.isFinite(Date.parse(x.recordedAt))).sort((a,b)=>Date.parse(a.recordedAt)-Date.parse(b.recordedAt));
  if(!records.length)return null;
  const localDay=d=>Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);
@@ -715,6 +717,20 @@ if(IS_ISOLATED_TEST){
   note.textContent="DLT連携テスト用｜架空の"+count+"日分の症状・セルフケア記録を表示中。保存しません。終了するにはページを再読み込みしてください。";
  });
 }
+if(IS_ISOLATED_TEST)document.getElementById("preview-week2").addEventListener("click",()=>{
+ const start=Date.UTC(2026,9,30)/86400000;
+ previewWeekOverride={startDay:start,endDay:start+6,weekIndex:1,label:"10/30〜11/5",dayOf:d=>Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000)};
+ const scores=[[2,2,2,2],[2,2,2,2],[1,2,1,2],[2,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]];
+ previewRecords=scores.map((v,i)=>({recordedAt:new Date(Date.UTC(2026,9,30+i,12)).toISOString(),dlt:{dizziness:v[0],unsteadiness:v[1],tinnitus:v[2],dailyImpact:v[3]},selfCare:{status:i===2?"not-done":"done",response:i===2?null:i<3?"same":"better"},rppg:{status:"valid",hr:70,rmssd:40,sdnn:50}}));
+ window.currentRPPG={hr:70,rmssd:40,sdnn:50};
+ document.getElementById("home-screen").classList.remove("active");
+ document.getElementById("step4-screen").classList.add("active");
+ showToday();
+ document.getElementById("finish-today").hidden=true;
+ let note=document.getElementById("preview-notice");
+ if(!note){note=document.createElement("p");note.id="preview-notice";note.className="helper";document.getElementById("today-screen").append(note);}
+ note.textContent="DLT連携テスト専用｜第2週（2026-10-30〜11-05）の架空7日分を表示中。保存しません。";
+});
 function showToday(){window.stopRppgCamera?.();step4.classList.remove("active");todayScreen.classList.add("active");renderToday();window.scrollTo(0,0)}
 function backToStep4(){todayScreen.classList.remove("active");step4.classList.add("active");window.scrollTo(0,0)}
 document.getElementById("start-record").addEventListener("click",showStep1);document.getElementById("back-home").addEventListener("click",showHome);document.querySelector(".next-button").addEventListener("click",showStep2);document.getElementById("back-step1").addEventListener("click",backToStep1);document.getElementById("to-step3").addEventListener("click",showStep3);document.getElementById("back-step2").addEventListener("click",backToStep2);document.getElementById("to-step4").addEventListener("click",showStep4);document.getElementById("back-step3").addEventListener("click",backToStep3);document.getElementById("show-today").addEventListener("click",showToday);document.getElementById("skip-measurement").addEventListener("click",()=>{window.currentRPPG=null;showToday()});document.getElementById("back-step4").addEventListener("click",backToStep4);
