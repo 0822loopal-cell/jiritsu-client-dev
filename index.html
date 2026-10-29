@@ -704,7 +704,7 @@ if(IS_ISOLATED_TEST){
  document.getElementById("isolated-preview").hidden=false;
  for(const count of [7,14])document.getElementById("preview-"+count).addEventListener("click",()=>{
   const d=new Date();d.setHours(12,0,0,0);
-  previewRecords=Array.from({length:count},(_,i)=>{const date=new Date(d);date.setDate(date.getDate()-i);return {recordedAt:date.toISOString(),selfCare:{status:"done",response:"same"},rppg:{status:"valid",hr:70,rmssd:40,sdnn:50}}});
+  previewRecords=Array.from({length:count},(_,i)=>{const date=new Date(d);date.setDate(date.getDate()-i);return {recordedAt:date.toISOString(),dlt:{dizziness:2,unsteadiness:2,tinnitus:1,dailyImpact:2},selfCare:{status:"done",response:"same"},rppg:{status:"valid",hr:70,rmssd:40,sdnn:50}}});
   document.querySelectorAll('[data-group="morning-condition"] button').forEach(x=>x.classList.toggle("selected",x.textContent.trim()==="普通"));
   window.currentRPPG={hr:70,rmssd:40,sdnn:50};
   document.getElementById("home-screen").classList.remove("active");
