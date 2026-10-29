@@ -604,8 +604,8 @@ function weeklySummaryText(){
  const life=a.length?`睡眠の記録 ${sleeps.length}日、本人感覚 ${feelings.length}日、活動 ${acts.length}日。今朝の感覚は「${first||"未記録"}」から「${last||"未記録"}」です。`:"この集計期間の記録はありません。";
  const camera=valid.length?`有効測定${valid.length}日。平均 HR ${avg("hr")} bpm / RMSSD ${avg("rmssd")} ms / SDNN ${avg("sdnn")} ms。本人内比較は、記録が蓄積した範囲で確認します。`:"有効なカメラ測定がないため、測定値の推移は表示しません。";
  let insight="まだ十分な記録がありません。記録を続けることで、生活と体感の関係を振り返りやすくなります。";
- if(a.length>=4) insight=first===last?`本人感覚は週の初めと直近で「${last}」でした。睡眠や活動と合わせて、同じ感覚の日の条件を見比べてみましょう。`:`本人感覚は週の初めの「${first}」から、直近は「${last}」でした。睡眠・活動の記録と一緒に変化した条件を確認してみましょう。`;
- const next=a.length>=4?"今週の記録で調子がよかった日の睡眠や活動を一つ選び、来週も無理なく再現できる条件を試してみましょう。":"まずは無理のない範囲で朝の記録を続け、あなた自身の比較材料を増やしていきましょう。";
+ if(feelings.length>=4) insight=first===last?`本人感覚は週の初めと直近で「${last}」でした。睡眠や活動と合わせて、同じ感覚の日の条件を見比べてみましょう。`:`本人感覚は週の初めの「${first}」から、直近は「${last}」でした。睡眠・活動の記録と一緒に変化した条件を確認してみましょう。`;
+ const next=feelings.length>=4&&sleeps.length>0&&acts.length>0?"今週の記録で調子がよかった日の睡眠や活動を一つ選び、来週も無理なく再現できる条件を試してみましょう。":a.length?"記録のある項目を振り返り、来週も無理のない範囲で記録を続けてみましょう。":"まずは無理のない範囲で記録を始め、あなた自身の比較材料を増やしていきましょう。";
  const dltNames=[["dizziness","めまい"],["unsteadiness","ふらつき"],["tinnitus","耳鳴り"],["dailyImpact","日常生活への影響"]];
  const dlt=dltNames.map(([key,name])=>{
   const values=a.map(x=>x.dlt?.[key]).filter(v=>Number.isInteger(v)&&v>=0&&v<=4);
