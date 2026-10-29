@@ -456,12 +456,12 @@ if(IS_ISOLATED_TEST){
  });
 }
 // Facility-issued client number is stored separately from daily records.
-const CLIENT_NUMBER_KEY="jiritsuClientDevClientNumberV1";
+const CLIENT_NUMBER_KEY=IS_ISOLATED_TEST?"jiritsuClientDevClientNumberIsolatedV1":"jiritsuClientDevClientNumberV1";
 function initClientNumber(){
  const panel=document.getElementById("client-number-panel");
  const input=document.getElementById("client-number-input");
  const status=document.getElementById("client-number-status");
- if(IS_ISOLATED_TEST){panel.hidden=true;return}
+ if(IS_ISOLATED_TEST){panel.querySelector(".helper").textContent="検証用の架空NOを登録してください。通常モードの登録番号とは別に保存します。";}
  const current=localStorage.getItem(CLIENT_NUMBER_KEY);
  if(current&&/^[0-9]{4}$/.test(current)){input.value=current;status.textContent="登録済み：NO "+current}
  document.getElementById("client-number-save").addEventListener("click",()=>{
