@@ -231,7 +231,7 @@
       <section class="card today-card"><p class="section-label">05 CAMERA</p><h2>カメラ測定値</h2><p id="weekly-camera" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">06 INSIGHT</p><h2>今週の気づき</h2><p id="weekly-insight" class="today-copy"></p></section>
       <section class="card today-card emphasis"><p class="section-label">07 NEXT WEEK</p><h2>来週の過ごし方</h2><p id="weekly-next" class="today-copy"></p></section>
-      <button id="share-weekly" class="primary-button" type="button">このサマリーを共有する <span aria-hidden="true">›</span></button>
+      <button id="share-weekly" class="primary-button" type="button">このサマリーを共有する <span aria-hidden="true">›</span></button><button id="copy-weekly" class="secondary-button" type="button" style="display:block;width:100%;margin-top:12px">共有文をコピーする（PC用）</button>
       <p id="share-weekly-status" class="time-note"></p>
     </section>
 
@@ -656,6 +656,7 @@ document.getElementById("back-history").addEventListener("click",showHome);
 document.getElementById("open-weekly").addEventListener("click",showWeekly);
 document.getElementById("back-weekly").addEventListener("click",showHistory);
 document.getElementById("share-weekly").addEventListener("click",shareWeekly);
+document.getElementById("copy-weekly").addEventListener("click",async()=>{const status=document.getElementById("share-weekly-status"),text=weeklyShareText();try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text)}else{const box=document.createElement("textarea");box.value=text;box.setAttribute("readonly","");box.style.cssText="position:fixed;left:-9999px;top:0";document.body.appendChild(box);box.select();const ok=document.execCommand("copy");box.remove();if(!ok)throw Error("コピー不可");}status.textContent="共有文をコピーしました。施設用アプリの入力欄でCtrl＋Vを押してください。";}catch(e){status.textContent="自動コピーできませんでした。共有先への送信は行っていません。";}});
 document.getElementById("finish-today").addEventListener("click",finishToday);
 updateWeeklyNotice();
 document.getElementById("saved-count").textContent=savedRecords().length;
