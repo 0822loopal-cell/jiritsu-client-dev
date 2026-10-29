@@ -712,7 +712,7 @@ if(IS_ISOLATED_TEST){
   showToday();
   document.getElementById("finish-today").hidden=true;
   let note=document.getElementById("preview-notice");if(!note){note=document.createElement("p");note.id="preview-notice";note.className="helper";document.getElementById("today-screen").append(note)}
-  note.textContent="検証用プレビュー（架空の"+count+"日分）｜保存不可。終了するにはページを再読み込みしてください。";
+  note.textContent="DLT連携テスト用｜架空の"+count+"日分の症状・セルフケア記録を表示中。保存しません。終了するにはページを再読み込みしてください。";
  });
 }
 function showToday(){window.stopRppgCamera?.();step4.classList.remove("active");todayScreen.classList.add("active");renderToday();window.scrollTo(0,0)}
