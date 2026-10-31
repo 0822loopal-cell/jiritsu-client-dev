@@ -647,7 +647,7 @@ function weeklyDailyPayload(){
  const statuses=["done","not-done","no-instruction"],responses=["better","same","change"];
  return {format:"JIRITSU-DAILY-V1",start:iso(p.startDay),end:iso(p.endDay),days:Array.from({length:7},(_,i)=>{
   const date=iso(p.startDay+i),r=days.get(date),d=r?.dlt||{},care=r?.selfCare||{};
-  return {date,dizziness:score(d.dizziness),unsteadiness:score(d.unsteadiness),tinnitus:score(d.tinnitus),dailyImpact:score(d.dailyImpact),selfCare:statuses.includes(care.status)?care.status:null,response:care.status==="done"&&responses.includes(care.response)?care.response:null};
+  const text=v=>typeof v==="string"&&v.trim()?v.trim().slice(0,100):null;const numeric=v=>typeof v==="number"&&Number.isFinite(v)&&v>=0&&v<=500?Math.round(v*10)/10:null;const camera=r?.rppg||{};return {date,dizziness:score(d.dizziness),unsteadiness:score(d.unsteadiness),tinnitus:score(d.tinnitus),dailyImpact:score(d.dailyImpact),selfCare:statuses.includes(care.status)?care.status:null,response:care.status==="done"&&responses.includes(care.response)?care.response:null,life:{sleep:text(r?.sleep?.feeling),condition:text(r?.morning?.condition),activity:text(r?.yesterday?.mainActivity)},camera:{status:["valid","reference"].includes(camera.status)?camera.status:"missing",hr:camera.status==="valid"?numeric(camera.hr):null,rmssd:camera.status==="valid"?numeric(camera.rmssd):null,sdnn:camera.status==="valid"?numeric(camera.sdnn):null}};
  })};
 }
 function weeklyShareText(){
