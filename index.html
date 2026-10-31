@@ -732,7 +732,7 @@ if(IS_ISOLATED_TEST)document.getElementById("preview-week2").addEventListener("c
  const start=Date.UTC(2026,9,30)/86400000;
  previewWeekOverride={startDay:start,endDay:start+6,weekIndex:1,label:"10/30〜11/5",dayOf:d=>Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000)};
  const scores=[[2,2,2,2],[2,2,2,2],[1,2,1,2],[2,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]];
- previewRecords=scores.map((v,i)=>({recordedAt:new Date(Date.UTC(2026,9,30+i,12)).toISOString(),dlt:{dizziness:v[0],unsteadiness:v[1],tinnitus:v[2],dailyImpact:v[3]},selfCare:{status:i===2?"not-done":"done",response:i===2?null:i<3?"same":"better"},rppg:{status:"valid",hr:70,rmssd:40,sdnn:50}}));
+ previewRecords=scores.map((v,i)=>({recordedAt:new Date(Date.UTC(2026,9,30+i,12)).toISOString(),dlt:{dizziness:v[0],unsteadiness:v[1],tinnitus:v[2],dailyImpact:v[3]},selfCare:{status:i===2?"not-done":"done",response:i===2?null:i<3?"same":"better"},sleep:{feeling:["普通","少し眠れた","あまり眠れない","普通","よく眠れた","普通","よく眠れた"][i]},morning:{condition:["普通","あまり良くない","あまり良くない","普通","まあ良い","普通","まあ良い"][i]},yesterday:{mainActivity:["家事","散歩","家事","買い物","散歩","家事","散歩"][i]},rppg:{status:"valid",hr:[74,76,78,72,70,71,69][i],rmssd:[34,32,30,38,40,42,44][i],sdnn:[44,42,39,48,50,52,54][i]}}));
  window.currentRPPG={hr:70,rmssd:40,sdnn:50};
  document.getElementById("home-screen").classList.remove("active");
  document.getElementById("step4-screen").classList.add("active");
