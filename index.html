@@ -225,12 +225,9 @@
       <header class="flow-head"><button id="back-weekly" class="back-button" type="button" aria-label="戻る">‹</button><div><p class="eyebrow">WEEKLY</p><h1>週間サマリー</h1></div></header>
       <p class="flow-intro">初回記録日を起点とする7日間の記録を振り返ります。記録がない日は推測で補いません。</p>
       <section class="card today-card"><p class="section-label">01 RECORD</p><h2>記録状況</h2><p id="weekly-record" class="today-copy"></p></section>
-      <section class="card today-card"><p class="section-label">02 LIFE & FEELING</p><h2>生活と体感の推移</h2><p id="weekly-life" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">03 DLT SUPPORT</p><h2>症状と生活への影響</h2><p id="weekly-dlt" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">04 SELF CARE</p><h2>セルフケア・セルフリハ</h2><p id="weekly-self-care" class="today-copy"></p></section>
-      <section class="card today-card"><p class="section-label">05 CAMERA</p><h2>カメラ測定値</h2><p id="weekly-camera" class="today-copy"></p></section>
-      <section class="card today-card"><p class="section-label">06 INSIGHT</p><h2>今週の気づき</h2><p id="weekly-insight" class="today-copy"></p></section>
-      <section class="card today-card emphasis"><p class="section-label">07 NEXT WEEK</p><h2>来週の過ごし方</h2><p id="weekly-next" class="today-copy"></p></section>
+      <p class="flow-intro">この共有文は、症状・日常生活への影響・セルフケアの記録を施設へ伝えるためのものです。日別の記録も一緒に共有されます。</p>
       <button id="share-weekly" class="primary-button" type="button">このサマリーを共有する <span aria-hidden="true">›</span></button><button id="copy-weekly" class="secondary-button" type="button" style="display:block;width:100%;margin-top:12px">共有文をコピーする（PC用）</button>
       <p id="share-weekly-status" class="time-note"></p>
     </section>
@@ -597,17 +594,9 @@ function weeklyData(){
  return savedRecords().filter(x=>{const t=Date.parse(x.recordedAt);if(!Number.isFinite(t))return false;const day=p.dayOf(new Date(t));return day>=p.startDay&&day<=p.endDay}).sort((a,b)=>Date.parse(a.recordedAt)-Date.parse(b.recordedAt));
 }
 function weeklySummaryText(){
- const a=weeklyData(),valid=a.filter(x=>x.rppg?.status==="valid");
- const feelings=a.map(x=>x.morning?.condition).filter(Boolean),sleeps=a.map(x=>x.sleep?.feeling).filter(Boolean),acts=a.map(x=>x.yesterday?.mainActivity).filter(Boolean);
- const avg=k=>valid.length?Math.round(valid.reduce((n,x)=>n+(Number(x.rppg?.[k])||0),0)/valid.length):null;
- const first=feelings[0],last=feelings.at(-1);
- const period=weeklyPeriod();
- const record=`${period?"第"+(period.weekIndex+1)+"週（"+period.label+"） / ":""}${a.length}日記録 / カメラ測定（有効）${valid.length}日。記録のない日は補完していません。`;
- const life=a.length?`睡眠の記録 ${sleeps.length}日、本人感覚 ${feelings.length}日、活動 ${acts.length}日。今朝の感覚は「${first||"未記録"}」から「${last||"未記録"}」です。`:"この集計期間の記録はありません。";
- const camera=valid.length?`有効測定${valid.length}日。平均 HR ${avg("hr")} bpm / RMSSD ${avg("rmssd")} ms / SDNN ${avg("sdnn")} ms。本人内比較は、記録が蓄積した範囲で確認します。`:"有効なカメラ測定がないため、測定値の推移は表示しません。";
- let insight="まだ十分な記録がありません。記録を続けることで、生活と体感の関係を振り返りやすくなります。";
- if(feelings.length>=4) insight=first===last?`本人感覚は週の初めと直近で「${last}」でした。睡眠や活動と合わせて、同じ感覚の日の条件を見比べてみましょう。`:`本人感覚は週の初めの「${first}」から、直近は「${last}」でした。睡眠・活動の記録と一緒に変化した条件を確認してみましょう。`;
- const next=feelings.length>=4&&sleeps.length>0&&acts.length>0?"今週の記録で調子がよかった日の睡眠や活動を一つ選び、来週も無理なく再現できる条件を試してみましょう。":a.length?"記録のある項目を振り返り、来週も無理のない範囲で記録を続けてみましょう。":"まずは無理のない範囲で記録を始め、あなた自身の比較材料を増やしていきましょう。";
+ const a=weeklyData(),period=weeklyPeriod();
+ const dltRecorded=a.filter(x=>["dizziness","unsteadiness","tinnitus","dailyImpact"].some(k=>Number.isInteger(x.dlt?.[k])&&x.dlt[k]>=0&&x.dlt[k]<=4)).length;
+ const record=`${period?"第"+(period.weekIndex+1)+"週（"+period.label+"） / ":""}${a.length}日記録 / DLT記録${dltRecorded}日。記録のない日は補完していません。`;
  const dltNames=[["dizziness","めまい"],["unsteadiness","ふらつき"],["tinnitus","耳鳴り"],["dailyImpact","日常生活への影響"]];
  const dlt=dltNames.map(([key,name])=>{
   const values=a.map(x=>x.dlt?.[key]).filter(v=>Number.isInteger(v)&&v>=0&&v<=4);
@@ -629,9 +618,9 @@ function weeklySummaryText(){
     }
   }
   const selfCare=`実施した ${statuses.done}日 / 実施しなかった ${statuses["not-done"]}日 / 指示なし ${statuses["no-instruction"]}日 / 未記録 ${statuses.missing}日。実施後の状態：楽になった ${responses.better}日 / 変わらない ${responses.same}日 / 気になる変化があった ${responses.change}日 / 未記録 ${responses.missing}日。記録のない日は補完していません。`;
-  return {record,life,dlt,selfCare,camera,insight,next};
+  return {record,dlt,selfCare};
 }
-function renderWeekly(){const x=weeklySummaryText();document.getElementById("weekly-record").textContent=x.record;document.getElementById("weekly-life").textContent=x.life;document.getElementById("weekly-dlt").textContent=x.dlt;document.getElementById("weekly-self-care").textContent=x.selfCare;document.getElementById("weekly-camera").textContent=x.camera;document.getElementById("weekly-insight").textContent=x.insight;document.getElementById("weekly-next").textContent=x.next}
+function renderWeekly(){const x=weeklySummaryText();document.getElementById("weekly-record").textContent=x.record;document.getElementById("weekly-dlt").textContent=x.dlt;document.getElementById("weekly-self-care").textContent=x.selfCare;}
 function showWeekly(){
  hideMainScreens();
  document.getElementById("weekly-screen").classList.add("active");
@@ -664,7 +653,7 @@ function weeklyShareText(){
  if(p)meta.push("集計期間："+isoDay(p.startDay)+"〜"+isoDay(p.endDay),"集計週：第"+(p.weekIndex+1)+"週");
  else meta.push("集計期間：未確定","集計週：未確定");
  const daily=weeklyDailyPayload();
- return ["DLT SUPPORT｜週間サマリー",meta.join("\n"),"① 記録状況\n"+x.record,"② 生活と体感の推移\n"+x.life,"③ DLT｜症状と生活への影響\n"+x.dlt,"④ セルフケア・セルフリハ\n"+x.selfCare,"⑤ カメラ測定値\n"+x.camera,"⑥ 今週の気づき\n"+x.insight,"⑦ 来週の過ごし方\n"+x.next ,...(daily?["⑧ 日別データ（アプリ連携用）\n"+JSON.stringify(daily)]:[])].join("\n\n");
+ return ["DLT SUPPORT｜週間サマリー",meta.join("\n"),"① 記録状況\n"+x.record,"③ DLT｜症状と生活への影響\n"+x.dlt,"④ セルフケア・セルフリハ\n"+x.selfCare,...(daily?["⑧ 日別データ（アプリ連携用）\n"+JSON.stringify(daily)]:[])].join("\n\n");
 }
 async function shareWeekly(){const text=weeklyShareText(),status=document.getElementById("share-weekly-status");try{if(navigator.share){await navigator.share({title:"DLT SUPPORT｜週間サマリー",text});status.textContent="共有先の選択は端末側で行います。"}else if(navigator.clipboard){await navigator.clipboard.writeText(text);status.textContent="サマリーをコピーしました。メールやLINEに貼り付けて共有できます。"}else{status.textContent="この環境では共有機能を利用できません。"}}catch(e){if(e?.name!=="AbortError")status.textContent="共有を開始できませんでした。もう一度お試しください。"}}
 document.getElementById("weekly-notice-open").addEventListener("click",showWeekly);
