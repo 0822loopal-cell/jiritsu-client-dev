@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#f4f7f5">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-  <title>DLTクライアント用｜テスト版｜自律調整院</title>
+  <title>DLTクライアント用｜開発中｜自律調整院</title>
   <link rel="stylesheet" href="css/style.css?v=20261002-bedroom-icons-v1">
   <script src="js/rppg.js" defer></script>
 </head>
 <body>
-  <div role="note" aria-label="アプリ識別" style="position:relative;z-index:2;background:#e8f2f0;color:#183c37;text-align:center;padding:11px 14px;font-size:14px;font-weight:700;line-height:1.5;border-bottom:2px solid #b6d3cc">DLTクライアント用｜開発版 Ver.0.1.0｜STEP 236<br><span style="font-size:11px;font-weight:500">自律調整院・施設用アプリとは別のアプリです</span></div>
+  <div role="note" aria-label="アプリ識別" style="position:relative;z-index:2;background:#e8f2f0;color:#183c37;text-align:center;padding:11px 14px;font-size:14px;font-weight:700;line-height:1.5;border-bottom:2px solid #b6d3cc">DLTクライアント用｜開発版 Ver.0.1.1<br><span style="font-size:11px;font-weight:500">自律調整院・施設用アプリとは別のアプリです</span></div>
   <div class="morning-bg" aria-hidden="true"><div class="morning-window"><span class="window-frame-h"></span><span class="window-frame-v"></span></div><div class="morning-plant"><span class="plant-stem"></span><span class="plant-leaf plant-leaf-1"></span><span class="plant-leaf plant-leaf-2"></span><span class="plant-leaf plant-leaf-3"></span><span class="plant-leaf plant-leaf-4"></span><span class="plant-leaf plant-leaf-5"></span><span class="plant-pot"></span></div><span class="leaf leaf-a"></span><span class="leaf leaf-b"></span><span class="leaf leaf-c"></span></div>
 
   <main class="app-shell">
     <section id="home-screen" class="screen active">
       <header class="top">
-        <p class="eyebrow">GOOD MORNING</p><h1>おはようございます</h1><p class="home-hero-title">今日の<br>コンディションを<br>チェックしましょう</p>
-        <p id="today-date" class="date">今日も、あなたの朝から。</p>
+        <p class="eyebrow">DAILY RECORD</p><h1>今日の調子を記録しましょう</h1><p class="home-hero-title">めまい・ふらつき・耳鳴りと<br>日常の様子を記録</p>
+        <p id="today-date" class="date">今日の日付</p>
       </header>
       <section class="card record-card" aria-labelledby="record-title">
         <div class="record-card-heading"><div class="card-icon icon-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg></div><div><h2 id="record-title">今朝の記録</h2>
@@ -36,7 +36,7 @@
       <section id="isolated-preview" class="card data-card" hidden><p class="section-label">TEST ONLY</p><h2>架空データでTODAYを確認</h2><p class="helper">保存記録は変更しません。架空の過去7日・14日と今朝の測定値を使います。</p><button id="preview-7" class="secondary-button" type="button">7日分でTODAYを表示</button><button id="preview-14" class="secondary-button" type="button">14日分でTODAYを表示</button><button id="preview-week1" class="secondary-button" type="button">第1週（10/23〜10/29）欠測ありのDLT架空データを表示</button><button id="preview-week2" class="secondary-button" type="button">第2週（10/30〜11/5）のDLT架空データを表示</button></section>
       <section id="client-number-panel" class="card data-card" aria-labelledby="client-number-title">
         <p class="section-label">JIRITSU SUPPORT</p><h2 id="client-number-title">クライアントNO</h2>
-        <p class="helper">自律調整院から案内された4桁の番号を登録してください。朝の記録には影響しません。</p>
+        <p class="helper">自律調整院から案内された4桁の番号を登録してください。日々の記録には影響しません。</p>
         <label for="client-number-input">4桁の番号</label>
         <input id="client-number-input" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" placeholder="例：0001" style="width:100%;padding:14px;border:1px solid #b6cbd6;border-radius:12px;font-size:18px;letter-spacing:.2em">
         <button id="client-number-save" class="secondary-button" type="button">番号を登録する</button>
