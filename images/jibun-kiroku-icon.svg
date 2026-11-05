@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="じぶん記録">
+<rect width="512" height="512" rx="108" fill="#fffdfb"/>
+<rect x="16" y="16" width="480" height="480" rx="96" fill="none" stroke="#06418b" stroke-width="15"/>
+<g transform="translate(0,-16)">
+<circle cx="164" cy="137" r="36" fill="#0750a4"/><circle cx="346" cy="137" r="36" fill="#d90429"/>
+<path d="M83 236 C126 232 162 184 181 162 C214 140 242 172 256 195 C235 168 210 174 196 198 C191 252 238 292 251 315 C214 282 171 236 159 191 C140 215 113 229 83 236 Z" fill="#0750a4"/>
+<path d="M429 236 C386 232 350 184 331 162 C298 140 270 172 256 195 C277 168 302 174 316 198 C321 252 274 292 261 315 C298 282 341 236 353 191 C372 215 399 229 429 236 Z" fill="#d90429"/>
+</g>
+<path d="M37 328 Q115 289 190 329 T354 330 T475 324" fill="none" stroke="#c4e7e5" stroke-width="15"/>
+<path d="M304 340 Q377 292 471 323" fill="none" stroke="#60b833" stroke-width="9" stroke-linecap="round"/>
+<path d="M382 303 Q365 279 367 253 Q394 258 400 286 Q420 253 449 250 Q445 286 402 302" fill="#63bc28"/>
+<text x="256" y="435" fill="#07356c" font-family="system-ui,'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif" font-weight="800" font-size="73" text-anchor="middle" letter-spacing="-2">じぶん記録</text>
+</svg>
