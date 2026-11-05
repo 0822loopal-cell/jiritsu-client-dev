@@ -56,7 +56,7 @@
         <button id="inspect-isolated-record" class="secondary-button" type="button">最新の保存内容を確認</button>
         <pre id="isolated-record-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.65" aria-live="polite"></pre>
       </section>
-      <p aria-label="アプリバージョン" style="position:relative;z-index:2;margin:18px 0 12px;text-align:center;color:#38536b;font-size:12px;font-weight:600">Ver.0.1.10</p>
+      <p aria-label="アプリバージョン" style="position:relative;z-index:2;margin:18px 0 12px;text-align:center;color:#38536b;font-size:12px;font-weight:600">Ver.0.1.11</p>
     </section>
 
     <section id="step1-screen" class="screen">
@@ -298,7 +298,7 @@ function personalPosition(value,baseline){
  return v<baseline.p10?"かなり低い側":v<baseline.p25?"低い側":v<=baseline.p75?"いつもの範囲":v<baseline.p90?"高い側":"かなり高い側";
 }
 function bodyComparison(r){
- if(!r)return "今回は身体反応の比較を行いません。";
+ if(!r)return "今回のカメラ測定データはありません。過去の測定値との比較は表示していません。";
  const metrics=["hr","rmssd","sdnn"];
  const stats=metrics.map(m=>({m,b:personalBaseline(m),value:r[m]}));
  const n=Math.min(...stats.map(x=>x.b.count));
