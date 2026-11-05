@@ -831,5 +831,13 @@ measureBtn?.addEventListener("click",()=>{
  measureCountdown=setInterval(()=>{if(generation!==cameraGeneration)return;sec--;countdown.textContent=sec>0?sec+" 秒":"測定完了";if(sec<=0){clearInterval(measureCountdown);measureCountdown=null}},1000);
  measureTimer=setTimeout(()=>{if(generation!==cameraGeneration)return;measureTimer=null;measuring=false;measureBtn.disabled=false;try{const out=window.RPPGEngine.analyze(rSamples,gSamples,bSamples,sampleTimes);window.currentRPPG=out;document.getElementById("rppg-hr").textContent=out.hr;document.getElementById("rppg-rmssd").textContent=out.rmssd??"--";document.getElementById("rppg-sdnn").textContent=out.sdnn??"--";document.getElementById("rppg-quality").textContent="測定品質："+out.quality;document.getElementById("rppg-result").hidden=false;camStatus.textContent="測定が完了しました。"}catch(e){camStatus.textContent="測定に必要なデータを取得できませんでした。もう一度測定するか、「測定せずに進む」を選んでください。";console.error(e)}},20000)
 });
+
+// Brief button feedback for touch and mouse; existing actions and data remain unchanged.
+document.addEventListener("click",event=>{
+ const button=event.target.closest?.("button");
+ if(!button||button.disabled)return;
+ button.classList.add("press-ack");
+ window.setTimeout(()=>button.classList.remove("press-ack"),280);
+},true);
 </script>
 </body></html>
