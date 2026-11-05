@@ -1,0 +1,19 @@
+{
+  "name": "じぶん記録 by 自律調整院",
+  "short_name": "じぶん記録",
+  "description": "めまい・ふらつき・耳鳴りと、日々の生活の記録",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffdfb",
+  "theme_color": "#f4f7f5",
+  "icons": [
+    {
+      "src": "images/jibun-kiroku-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
