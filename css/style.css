@@ -519,3 +519,21 @@ button:focus-visible{outline:3px solid #257a87;outline-offset:3px}
   transform:none!important;
   pointer-events:none;
 }
+
+
+/* Navigation tabs and inline measurement-details link: no rectangular pressed-in effect. */
+#bottom-nav .nav-item,
+#detail-toggle{
+  -webkit-tap-highlight-color:transparent;
+  box-shadow:none!important;
+}
+#bottom-nav .nav-item:active,
+#bottom-nav .nav-item.press-ack,
+#detail-toggle:active,
+#detail-toggle.press-ack{
+  transform:none!important;
+  filter:none!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  opacity:.76;
+}
