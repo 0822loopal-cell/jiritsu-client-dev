@@ -511,15 +511,11 @@ button:focus-visible{outline:3px solid #257a87;outline-offset:3px}
   #step3-screen .dlt-rating .choice-grid[data-group^="dlt-"] button{min-height:46px;font-size:15px}
 }
 
-/* The required-condition navigation button must look inactive while disabled. */
+/* Match the existing next-button disabled state: faded blue, not gray. */
 #step3-screen #to-step4:disabled{
-  opacity:1!important;
-  color:#7d8a99!important;
-  background:#e3e8ec!important;
-  border:1px solid #cbd4dd!important;
+  opacity:.42!important;
   box-shadow:none!important;
-  filter:none!important;
-  cursor:not-allowed!important;
+  cursor:not-allowed;
   transform:none!important;
   pointer-events:none;
 }
