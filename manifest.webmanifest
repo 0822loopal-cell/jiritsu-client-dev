@@ -10,6 +10,12 @@
   "theme_color": "#f4f7f5",
   "icons": [
     {
+      "src": "images/jibun-kiroku-apple.png",
+      "sizes": "120x120",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "images/jibun-kiroku-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
