@@ -25,9 +25,9 @@
         <p id="today-date" class="date">今日の日付</p>
       </header>
       <section class="card record-card" aria-labelledby="record-title">
-        <div class="record-card-heading"><div class="card-icon icon-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg></div><div><h2 id="record-title">今朝の記録</h2>
-        <p class="body-copy">昨夜の睡眠と、今朝のあなたを記録します。</p></div></div>
-        <button class="primary-button" type="button" id="start-record">今朝の記録をはじめる <span aria-hidden="true">›</span></button><p class="time-note">◷ 約2〜3分</p>
+        <div class="record-card-heading"><div class="card-icon icon-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg></div><div><h2 id="record-title">今日の記録</h2>
+        <p class="body-copy">昨夜の睡眠と、今の状態を記録します。</p></div></div>
+        <button class="primary-button" type="button" id="start-record">今日の記録をはじめる <span aria-hidden="true">›</span></button><p class="time-note">◷ 約2〜3分</p>
       </section>
       <section class="card data-card" aria-labelledby="data-title"><div class="data-heading"><div class="data-title-wrap"><div class="data-card-icon icon-chart" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="4" height="9" rx="1"/><rect x="10" y="6" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="17" rx="1"/></svg></div><div><h2 id="data-title">わたしのデータ</h2></div></div></div>
         <div class="data-row"><div><span class="data-number" id="saved-count">0</span><span class="data-unit">件</span><p>保存済み記録</p><p class="helper">うちrPPG有効：<span id="valid-count">0</span>件</p></div><p class="data-message">記録を重ねると、<br>あなた比が見えてきます。</p></div>
@@ -56,7 +56,7 @@
         <button id="inspect-isolated-record" class="secondary-button" type="button">最新の保存内容を確認</button>
         <pre id="isolated-record-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.65" aria-live="polite"></pre>
       </section>
-      <p aria-label="アプリバージョン" style="position:relative;z-index:2;margin:18px 0 12px;text-align:center;color:#38536b;font-size:12px;font-weight:600">Ver.0.1.6</p>
+      <p aria-label="アプリバージョン" style="position:relative;z-index:2;margin:18px 0 12px;text-align:center;color:#38536b;font-size:12px;font-weight:600">Ver.0.1.7</p>
     </section>
 
     <section id="step1-screen" class="screen">
@@ -127,16 +127,16 @@
         <p class="env-note">数値の良し悪しはここでは判定しません。起きたときの値を、そのまま記録します。</p>
       </section>
       <button class="primary-button" type="button" id="to-step3">次へ</button>
-      <p class="time-note">次は「今朝のわたし」です</p>
+      <p class="time-note">次は「いまのわたし」です</p>
     </section>
 
     <section id="step3-screen" class="screen">
-      <header class="flow-head"><button id="back-step2" class="back-button" type="button" aria-label="戻る">‹</button><div><p class="eyebrow">MORNING RECORD</p><h1>今朝のわたし</h1></div><span class="step-count">3 / 4</span></header>
-      <div class="visual-step-progress" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><p class="flow-intro">測定の前に、今朝のあなた自身の感覚を記録します。</p>
-      <section class="card form-card"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>THIS MORNING</p><h2>今朝のコンディション</h2><p class="helper">いちばん近いものを1つ</p>
+      <header class="flow-head"><button id="back-step2" class="back-button" type="button" aria-label="戻る">‹</button><div><p class="eyebrow">DAILY RECORD</p><h1>いまのわたし</h1></div><span class="step-count">3 / 4</span></header>
+      <div class="visual-step-progress" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><p class="flow-intro">測定の前に、現在のご自身の感覚を記録します。</p>
+      <section class="card form-card"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>CURRENT CONDITION</p><h2>いまのコンディション</h2><p class="helper">いちばん近いものを1つ</p>
         <div class="choice-grid single condition-choices" data-group="morning-condition"><button type="button">とても良い</button><button type="button">まあ良い</button><button type="button">普通</button><button type="button">あまり良くない</button><button type="button" data-poor="true">良くない</button></div>
       </section>
-      <section class="card form-card"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3Z"/></svg></span>FEELING</p><h2>今朝もっとも近い感じ</h2><p class="helper">任意・1つだけ選べます</p>
+      <section class="card form-card"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3Z"/></svg></span>FEELING</p><h2>いま最も近い感じ</h2><p class="helper">任意・1つだけ選べます</p>
         <div class="choice-grid single" data-group="morning-feeling"><button type="button">いつも通り</button><button type="button">眠い</button><button type="button">身体が重い</button><button type="button">頭がスッキリしない</button><button type="button">気分が乗らない</button><button type="button">その他</button></div>
       </section>
       <section class="card form-card" id="dlt-daily-record">
@@ -222,7 +222,7 @@
 
     <section id="history-screen" class="screen">
       <header class="flow-head"><button id="back-history" class="back-button" type="button" aria-label="戻る">‹</button><div><p class="eyebrow">HISTORY</p><h1>これまでの記録</h1></div></header>
-      <p class="flow-intro">朝の記録を、新しい順に振り返ります。</p>
+      <p class="flow-intro">日々の記録を、新しい順に振り返ります。</p>
       <section class="card today-card"><div id="history-list"></div></section>
       <button id="open-weekly" class="primary-button" type="button">週間サマリーを見る <span aria-hidden="true">›</span></button>
     </section>
@@ -241,8 +241,8 @@
 
     <section id="today-screen" class="screen">
       <header class="flow-head"><button id="back-step4" class="back-button" type="button" aria-label="戻る">‹</button><div><p class="eyebrow">TODAY</p><h1>今日のあなた</h1></div></header>
-      <p class="flow-intro">今朝の感覚と身体反応を、あなた比で見ていきます。</p><div class="today-visual-heading"><span class="today-sprout" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V11M12 15C5 15 3 10 3 5c7 0 9 4 9 10ZM12 12c0-6 4-9 9-9 0 6-3 9-9 9Z"/></svg></span><span>今日の過ごし方</span></div>
-      <section class="card today-card today-condition today-advice-row"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>CONDITION</p><h2>今朝のコンディション</h2><p id="today-feeling" class="today-lead">あなたの感覚：--</p><p id="today-body" class="today-copy">身体反応を確認しています。</p><button id="detail-toggle" class="text-button" type="button">詳しい測定結果を見る</button><div id="detail-metrics" class="detail-metrics result-metric-grid" hidden><div class="result-metric"><span class="result-metric-label">心拍数 <small>HR</small></span><strong id="today-hr">--</strong><span class="result-metric-unit">bpm</span></div><div class="result-metric"><span class="result-metric-label">拍動間隔の変動 <small>RMSSD</small></span><strong id="today-rmssd">--</strong><span class="result-metric-unit">ms</span></div><div class="result-metric"><span class="result-metric-label">拍動間隔のばらつき <small>SDNN</small></span><strong id="today-sdnn">--</strong><span class="result-metric-unit">ms</span></div></div></section>
+      <p class="flow-intro">記録時の感覚と身体反応を、あなた比で見ていきます。</p><div class="today-visual-heading"><span class="today-sprout" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V11M12 15C5 15 3 10 3 5c7 0 9 4 9 10ZM12 12c0-6 4-9 9-9 0 6-3 9-9 9Z"/></svg></span><span>今日の過ごし方</span></div>
+      <section class="card today-card today-condition today-advice-row"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>CONDITION</p><h2>記録時のコンディション</h2><p id="today-feeling" class="today-lead">あなたの感覚：--</p><p id="today-body" class="today-copy">身体反応を確認しています。</p><button id="detail-toggle" class="text-button" type="button">詳しい測定結果を見る</button><div id="detail-metrics" class="detail-metrics result-metric-grid" hidden><div class="result-metric"><span class="result-metric-label">心拍数 <small>HR</small></span><strong id="today-hr">--</strong><span class="result-metric-unit">bpm</span></div><div class="result-metric"><span class="result-metric-label">拍動間隔の変動 <small>RMSSD</small></span><strong id="today-rmssd">--</strong><span class="result-metric-unit">ms</span></div><div class="result-metric"><span class="result-metric-label">拍動間隔のばらつき <small>SDNN</small></span><strong id="today-sdnn">--</strong><span class="result-metric-unit">ms</span></div></div></section>
       <section class="card today-card emphasis today-pace today-advice-row"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="m7 21 3-6 2-3 3 2 4 1M4 12l5-3 3 3m0 0-2 3m2-3 2-4 4 1"/></svg></span>RECORD CHECK</p><h2>記録の確認</h2><p id="today-guide" class="guide-copy">今日の記録内容をご確認ください。記録は自律調整院での継続サポートに活用します。</p></section>
       <section id="insight-card" class="card today-card" hidden><p class="section-label">INSIGHT</p><h2>気づき</h2><p id="insight-text" class="today-copy"></p></section>
       <section id="try-card" class="card today-card" hidden><p class="section-label">ONE TRY</p><h2>次のチャレンジ</h2><p id="try-text" class="today-copy"></p><button class="secondary-button" type="button">やってみる</button></section>
@@ -493,7 +493,7 @@ function optionalNumber(id){
 function finishToday(){
  if(IS_ISOLATED_TEST && previewRecords){alert("架空データの表示中は保存できません。再読み込みして通常の検証入力から記録してください。");return}
  const feeling=selectedValue("morning-condition");
- if(!feeling){alert("今朝の感覚が確認できません。");return}
+ if(!feeling){alert("記録時の感覚が確認できません。");return}
  const r=window.currentRPPG||null;
  const date=new Date();
  const records=savedRecords();
@@ -538,7 +538,7 @@ function showHistory(){
  const records=[...savedRecords()].sort((a,b)=>Date.parse(b.recordedAt)-Date.parse(a.recordedAt));
  const box=document.getElementById("history-list");
  if(!records.length){box.innerHTML='<p class="today-copy">まだ保存された記録はありません。</p>'}
- else box.innerHTML=records.map(x=>{const m=x.morning?.condition||"未記録",s=x.sleep?.feeling||"未記録",r=x.rppg?.status==="valid"?`HR ${Math.round(x.rppg.hr)} / RMSSD ${Math.round(x.rppg.rmssd)} / SDNN ${Math.round(x.rppg.sdnn)}`:"測定なし・参考値";const score=v=>Number.isInteger(v)&&v>=0&&v<=4?String(v):"未記録";const d=x.dlt||{};return `<div style="padding:12px 0;border-bottom:1px solid #eee"><strong>${formatRecordDate(x.recordedAt)}</strong><p class="today-copy">睡眠：${s}<br>今朝：${m}<br>めまい：${score(d.dizziness)} / ふらつき：${score(d.unsteadiness)}<br>耳鳴り：${score(d.tinnitus)} / 日常生活への影響：${score(d.dailyImpact)}<br>カメラ：${r}</p></div>`}).join("");
+ else box.innerHTML=records.map(x=>{const m=x.morning?.condition||"未記録",s=x.sleep?.feeling||"未記録",r=x.rppg?.status==="valid"?`HR ${Math.round(x.rppg.hr)} / RMSSD ${Math.round(x.rppg.rmssd)} / SDNN ${Math.round(x.rppg.sdnn)}`:"測定なし・参考値";const score=v=>Number.isInteger(v)&&v>=0&&v<=4?String(v):"未記録";const d=x.dlt||{};return `<div style="padding:12px 0;border-bottom:1px solid #eee"><strong>${formatRecordDate(x.recordedAt)}</strong><p class="today-copy">睡眠：${s}<br>記録時：${m}<br>めまい：${score(d.dizziness)} / ふらつき：${score(d.unsteadiness)}<br>耳鳴り：${score(d.tinnitus)} / 日常生活への影響：${score(d.dailyImpact)}<br>カメラ：${r}</p></div>`}).join("");
  window.scrollTo(0,0);
 }
 const WEEKLY_NOTICE_KEY=STORAGE_KEY+"__weeklyNotice";
