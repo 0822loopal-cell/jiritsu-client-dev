@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="じぶん記録">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>じぶん記録｜自律調整院</title>
-  <link rel="stylesheet" href="css/style.css?v=20261002-bedroom-icons-v1">
+  <link rel="stylesheet" href="css/style.css?v=0.1.8">
   <script src="js/rppg.js" defer></script>
 </head>
 <body>
@@ -56,7 +56,7 @@
         <button id="inspect-isolated-record" class="secondary-button" type="button">最新の保存内容を確認</button>
         <pre id="isolated-record-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.65" aria-live="polite"></pre>
       </section>
-      <p aria-label="アプリバージョン" style="position:relative;z-index:2;margin:18px 0 12px;text-align:center;color:#38536b;font-size:12px;font-weight:600">Ver.0.1.7</p>
+      <p aria-label="アプリバージョン" style="position:relative;z-index:2;margin:18px 0 12px;text-align:center;color:#38536b;font-size:12px;font-weight:600">Ver.0.1.8</p>
     </section>
 
     <section id="step1-screen" class="screen">
@@ -263,7 +263,7 @@ function showStep1(){home.classList.remove("active");step1.classList.add("active
 function showHome(){updateWeeklyNotice();window.stopRppgCamera?.();step1.classList.remove("active");step2.classList.remove("active");step3.classList.remove("active");step4.classList.remove("active");todayScreen.classList.remove("active");home.classList.add("active");nav.hidden=false;window.scrollTo(0,0)}
 function showStep2(){step1.classList.remove("active");step2.classList.add("active");window.scrollTo(0,0)}
 function backToStep1(){step2.classList.remove("active");step1.classList.add("active");window.scrollTo(0,0)}
-function showStep3(){step2.classList.remove("active");step3.classList.add("active");window.scrollTo(0,0)}
+function showStep3(){step2.classList.remove("active");step3.classList.add("active");updateMorningGate();window.scrollTo(0,0)}
 function backToStep2(){step3.classList.remove("active");step2.classList.add("active");window.scrollTo(0,0)}
 function showStep4(){window.currentRPPG=null;step3.classList.remove("active");step4.classList.add("active");window.scrollTo(0,0)}
 function backToStep3(){window.stopRppgCamera?.();step4.classList.remove("active");step3.classList.add("active");window.scrollTo(0,0)}
