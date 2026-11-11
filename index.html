@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/style.css?v=0.1.12">
   <script src="js/rppg.js" defer></script>
 </head>
-<body>
+<body data-app-version="0.1.15">
   <div role="note" aria-label="アプリ名と提供元" style="position:relative;z-index:2;background:#e8f2f0;color:#183c37;display:flex;align-items:baseline;justify-content:center;gap:8px;white-space:nowrap;padding:11px 8px;line-height:1.4;border-bottom:2px solid #b6d3cc"><strong style="font-size:clamp(17px,4.5vw,21px);font-weight:700">じぶん記録</strong><span style="font-size:clamp(10px,2.8vw,12px);font-weight:500;color:#46645d">by 自律調整院</span></div>
   <div class="morning-bg" aria-hidden="true"><div class="morning-window"><span class="window-frame-h"></span><span class="window-frame-v"></span></div><div class="morning-plant"><span class="plant-stem"></span><span class="plant-leaf plant-leaf-1"></span><span class="plant-leaf plant-leaf-2"></span><span class="plant-leaf plant-leaf-3"></span><span class="plant-leaf plant-leaf-4"></span><span class="plant-leaf plant-leaf-5"></span><span class="plant-pot"></span></div><span class="leaf leaf-a"></span><span class="leaf leaf-b"></span><span class="leaf leaf-c"></span></div>
 
@@ -56,7 +56,7 @@
         <button id="inspect-isolated-record" class="secondary-button" type="button">最新の保存内容を確認</button>
         <pre id="isolated-record-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.65" aria-live="polite"></pre>
       </section>
-      <p aria-label="アプリバージョン" style="position:relative;z-index:2;margin:18px 0 12px;text-align:center;color:#38536b;font-size:12px;font-weight:600">Ver.0.1.14</p>
+      <p aria-label="アプリバージョン" style="position:relative;z-index:2;margin:18px 0 12px;text-align:center;color:#38536b;font-size:12px;font-weight:600">Ver.0.1.15</p>
     </section>
 
     <section id="step1-screen" class="screen">
@@ -260,7 +260,7 @@ const d=new Date(),w=["日","月","火","水","木","金","土"];
 document.getElementById("today-date").textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${w[d.getDay()]}）`;
 const home=document.getElementById("home-screen"),step1=document.getElementById("step1-screen"),step2=document.getElementById("step2-screen"),step3=document.getElementById("step3-screen"),step4=document.getElementById("step4-screen"),todayScreen=document.getElementById("today-screen"),nav=document.getElementById("bottom-nav");
 function showStep1(){home.classList.remove("active");step1.classList.add("active");nav.hidden=true;window.scrollTo(0,0)}
-function showHome(){updateWeeklyNotice();window.stopRppgCamera?.();step1.classList.remove("active");step2.classList.remove("active");step3.classList.remove("active");step4.classList.remove("active");todayScreen.classList.remove("active");home.classList.add("active");nav.hidden=false;window.scrollTo(0,0)}
+function showHome(){updateWeeklyNotice();window.setTimeout(checkForAppUpdate,0);window.stopRppgCamera?.();step1.classList.remove("active");step2.classList.remove("active");step3.classList.remove("active");step4.classList.remove("active");todayScreen.classList.remove("active");home.classList.add("active");nav.hidden=false;window.scrollTo(0,0)}
 function showStep2(){step1.classList.remove("active");step2.classList.add("active");window.scrollTo(0,0)}
 function backToStep1(){step2.classList.remove("active");step1.classList.add("active");window.scrollTo(0,0)}
 function showStep3(){step2.classList.remove("active");step3.classList.add("active");updateMorningGate();window.scrollTo(0,0)}
@@ -883,6 +883,32 @@ measureBtn?.addEventListener("click",()=>{
  measureTimer=setTimeout(()=>{if(generation!==cameraGeneration)return;measureTimer=null;measuring=false;measureBtn.disabled=false;try{const out=window.RPPGEngine.analyze(rSamples,gSamples,bSamples,sampleTimes);window.currentRPPG=out;document.getElementById("rppg-hr").textContent=out.hr;document.getElementById("rppg-rmssd").textContent=out.rmssd??"--";document.getElementById("rppg-sdnn").textContent=out.sdnn??"--";document.getElementById("rppg-quality").textContent="測定品質："+out.quality;document.getElementById("rppg-result").hidden=false;camStatus.textContent="測定が完了しました。"}catch(e){camStatus.textContent="測定に必要なデータを取得できませんでした。もう一度測定するか、「測定せずに進む」を選んでください。";console.error(e)}},20000)
 });
 
+// Version check for Home Screen web apps. Never clear local data or interrupt forms.
+const CLIENT_APP_VERSION=document.body.dataset.appVersion;
+let clientUpdateBusy=false,clientUpdateAttempted=false;
+async function checkForAppUpdate(){
+ if(clientUpdateBusy||clientUpdateAttempted||document.visibilityState==="hidden"||!document.getElementById("home-screen").classList.contains("active"))return;
+ if(!navigator.onLine)return;
+ clientUpdateBusy=true;
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);
+ try{
+  const checkUrl=new URL(window.location.href);
+  checkUrl.searchParams.set("_version_check",String(Date.now()));
+  const response=await fetch(checkUrl.href,{cache:"no-store",signal:controller.signal,redirect:"follow"});
+  if(!response.ok)return;
+  const html=await response.text();
+  const latest=html.match(/<body[^>]*data-app-version="([0-9]+\.[0-9]+\.[0-9]+)"/i)?.[1];
+  if(!latest||latest===CLIENT_APP_VERSION)return;
+  if(!document.getElementById("home-screen").classList.contains("active"))return;
+  clientUpdateAttempted=true;
+  const next=new URL(window.location.href);
+  next.searchParams.set("_updated",latest);
+  window.location.replace(next.href);
+ }catch(e){/* Offline or transient network issues must not block recording. */}
+ finally{clearTimeout(timer);clientUpdateBusy=false;}
+}
+window.addEventListener("pageshow",()=>{setTimeout(checkForAppUpdate,500);});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")setTimeout(checkForAppUpdate,400);});
 // Brief button feedback for touch and mouse; existing actions and data remain unchanged.
 document.addEventListener("click",event=>{
  const button=event.target.closest?.("button");
