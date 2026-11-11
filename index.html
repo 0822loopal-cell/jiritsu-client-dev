@@ -638,7 +638,8 @@ function renderWeekly(){
    const start=p.startDay+(i-p.weekIndex)*7,end=start+6,complete=i<p.currentIndex;
    const option=document.createElement("option");option.value=String(i);option.textContent="第"+(i+1)+"週｜"+iso(start)+"〜"+iso(end)+(complete?"":"（集計中）");option.selected=i===p.weekIndex;select.appendChild(option);
   }
-  note.textContent=p.complete?"集計期間："+iso(p.startDay)+"〜"+iso(p.endDay)+"（7日間・共有可能）":"集計期間："+iso(p.startDay)+"〜"+iso(p.endDay)+"（集計中）。7日間が終了すると共有できます。";
+  const jp=day=>{const d=new Date(day*86400000);return d.getUTCFullYear()+"年"+(d.getUTCMonth()+1)+"月"+d.getUTCDate()+"日";};
+  note.textContent=jp(p.startDay)+"〜"+jp(p.endDay)+"のサマリー"+(p.complete?"（7日間・共有可能）":"（集計中）。7日間が終了すると共有できます。");
  }else{const option=document.createElement("option");option.textContent="記録なし";select.appendChild(option);note.textContent="記録がありません。";}
  share.disabled=!p||!p.complete;
  share.textContent=p?.complete?"この7日間のサマリーを共有する ›":"7日間が終了すると共有できます";
