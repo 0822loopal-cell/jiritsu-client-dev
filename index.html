@@ -56,7 +56,7 @@
         <button id="inspect-isolated-record" class="secondary-button" type="button">最新の保存内容を確認</button>
         <pre id="isolated-record-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.65" aria-live="polite"></pre>
       </section>
-      <p aria-label="アプリバージョン" style="position:relative;z-index:2;margin:18px 0 12px;text-align:center;color:#38536b;font-size:12px;font-weight:600">Ver.0.1.13</p>
+      <p aria-label="アプリバージョン" style="position:relative;z-index:2;margin:18px 0 12px;text-align:center;color:#38536b;font-size:12px;font-weight:600">Ver.0.1.14</p>
     </section>
 
     <section id="step1-screen" class="screen">
@@ -229,13 +229,13 @@
 
     <section id="weekly-screen" class="screen">
       <header class="flow-head"><button id="back-weekly" class="back-button" type="button" aria-label="戻る">‹</button><div><p class="eyebrow">WEEKLY</p><h1>週間サマリー</h1></div></header>
-      <p class="flow-intro">初回記録日を起点とする7日間の記録を振り返ります。記録がない日は推測で補いません。</p>
+      <p class="flow-intro">初回記録日を起点に、7日ずつ区切って振り返ります。記録がない日は推測で補いません。</p><div class="card today-card"><label for="weekly-period-select" style="display:block;font-weight:700;margin-bottom:8px">集計期間を選ぶ</label><select id="weekly-period-select" style="width:100%;min-height:48px;font:inherit;padding:8px;border:1px solid #a8c7df;border-radius:8px;background:#fff"></select><p id="weekly-period-note" class="today-copy" style="margin-top:10px"></p></div>
       <section class="card today-card"><p class="section-label">01 RECORD</p><h2>記録状況</h2><p id="weekly-record" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">02 LIFE & FEELING</p><h2>生活と体感の推移</h2><p id="weekly-life" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">03 DLT SUPPORT</p><h2>症状と生活への影響</h2><p id="weekly-dlt" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">04 SELF CARE</p><h2>セルフケア・セルフリハ</h2><p id="weekly-self-care" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">05 CAMERA</p><h2>カメラ測定値</h2><p id="weekly-camera" class="today-copy"></p></section>
-      <button id="share-weekly" class="primary-button" type="button">このサマリーを共有する <span aria-hidden="true">›</span></button><button id="copy-weekly" class="secondary-button" type="button" style="display:block;width:100%;margin-top:12px">共有文をコピーする（PC用）</button>
+      <button id="share-weekly" class="primary-button" type="button">この7日間のサマリーを共有する <span aria-hidden="true">›</span></button>
       <p id="share-weekly-status" class="time-note"></p>
     </section>
 
@@ -575,17 +575,22 @@ function markWeeklyNoticeChecked(){
  const state=weeklyNoticeState();
  if(state.periodKey)localStorage.setItem(WEEKLY_NOTICE_KEY,state.periodKey);
  document.getElementById("weekly-notice").hidden=true;
-}function weeklyPeriod(){
-  if(IS_ISOLATED_TEST&&previewWeekOverride)return previewWeekOverride;
+}let selectedWeeklyIndex=null;
+function weeklyPeriod(){
+  if(IS_ISOLATED_TEST&&previewWeekOverride)return {...previewWeekOverride,complete:true};
  const records=savedRecords().filter(x=>Number.isFinite(Date.parse(x.recordedAt))).sort((a,b)=>Date.parse(a.recordedAt)-Date.parse(b.recordedAt));
  if(!records.length)return null;
  const localDay=d=>Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);
  const firstDay=localDay(new Date(records[0].recordedAt));
  const todayDay=localDay(new Date());
- const weekIndex=Math.max(0,Math.floor((todayDay-firstDay)/7));
+ const elapsed=Math.max(0,todayDay-firstDay);
+ const currentIndex=Math.floor(elapsed/7);
+ const latestCompleteIndex=currentIndex-1;
+ const weekIndex=selectedWeeklyIndex===null?Math.max(0,latestCompleteIndex):Math.min(Math.max(0,selectedWeeklyIndex),currentIndex);
  const startDay=firstDay+weekIndex*7,endDay=startDay+6;
+ const complete=todayDay>endDay;
  const label=day=>{const d=new Date(day*86400000);return (d.getUTCMonth()+1)+"/"+d.getUTCDate()};
- return {startDay,endDay,weekIndex,label:label(startDay)+"〜"+label(endDay),dayOf:localDay};
+ return {startDay,endDay,weekIndex,currentIndex,complete,label:label(startDay)+"〜"+label(endDay),dayOf:localDay};
 }
 function weeklyData(){
  const p=weeklyPeriod();
@@ -624,7 +629,26 @@ function weeklySummaryText(){
   const selfCare=`実施した ${statuses.done}日 / 実施しなかった ${statuses["not-done"]}日 / 指示なし ${statuses["no-instruction"]}日 / 未記録 ${statuses.missing}日。実施後の状態：楽になった ${responses.better}日 / 変わらない ${responses.same}日 / 気になる変化があった ${responses.change}日 / 未記録 ${responses.missing}日。記録のない日は補完していません。`;
   return {record,life,dlt,selfCare,camera};
 }
-function renderWeekly(){const x=weeklySummaryText();document.getElementById("weekly-record").textContent=x.record;document.getElementById("weekly-life").textContent=x.life;document.getElementById("weekly-dlt").textContent=x.dlt;document.getElementById("weekly-self-care").textContent=x.selfCare;document.getElementById("weekly-camera").textContent=x.camera}
+function renderWeekly(){
+ const x=weeklySummaryText(),p=weeklyPeriod(),select=document.getElementById("weekly-period-select"),note=document.getElementById("weekly-period-note"),share=document.getElementById("share-weekly");
+ select.replaceChildren();
+ if(p){
+  const iso=day=>new Date(day*86400000).toISOString().slice(0,10);
+  for(let i=0;i<=p.currentIndex;i++){
+   const start=p.startDay+(i-p.weekIndex)*7,end=start+6,complete=i<p.currentIndex;
+   const option=document.createElement("option");option.value=String(i);option.textContent="第"+(i+1)+"週｜"+iso(start)+"〜"+iso(end)+(complete?"":"（集計中）");option.selected=i===p.weekIndex;select.appendChild(option);
+  }
+  note.textContent=p.complete?"集計期間："+iso(p.startDay)+"〜"+iso(p.endDay)+"（7日間・共有可能）":"集計期間："+iso(p.startDay)+"〜"+iso(p.endDay)+"（集計中）。7日間が終了すると共有できます。";
+ }else{const option=document.createElement("option");option.textContent="記録なし";select.appendChild(option);note.textContent="記録がありません。";}
+ share.disabled=!p||!p.complete;
+ share.textContent=p?.complete?"この7日間のサマリーを共有する ›":"7日間が終了すると共有できます";
+ document.getElementById("weekly-record").textContent=x.record;
+ document.getElementById("weekly-life").textContent=x.life;
+ document.getElementById("weekly-dlt").textContent=x.dlt;
+ document.getElementById("weekly-self-care").textContent=x.selfCare;
+ document.getElementById("weekly-camera").textContent=x.camera;
+}
+document.getElementById("weekly-period-select").addEventListener("change",e=>{selectedWeeklyIndex=Number(e.target.value);renderWeekly();document.getElementById("share-weekly-status").textContent="";});
 function showWeekly(){
  hideMainScreens();
  document.getElementById("weekly-screen").classList.add("active");
@@ -659,7 +683,7 @@ function weeklyShareText(){
  const daily=weeklyDailyPayload();
  return ["DLT SUPPORT｜週間サマリー",meta.join("\n"),"① 記録状況\n"+x.record,"② 生活と体感の推移\n"+x.life,"③ DLT｜症状と生活への影響\n"+x.dlt,"④ セルフケア・セルフリハ\n"+x.selfCare,"⑤ カメラ測定値\n"+x.camera ,...(daily?["⑧ 日別データ（アプリ連携用）\n"+JSON.stringify(daily)]:[])].join("\n\n");
 }
-async function shareWeekly(){const text=weeklyShareText(),status=document.getElementById("share-weekly-status");try{if(navigator.share){await navigator.share({title:"DLT SUPPORT｜週間サマリー",text});status.textContent="共有先の選択は端末側で行います。"}else if(navigator.clipboard){await navigator.clipboard.writeText(text);status.textContent="サマリーをコピーしました。メールやLINEに貼り付けて共有できます。"}else{status.textContent="この環境では共有機能を利用できません。"}}catch(e){if(e?.name!=="AbortError")status.textContent="共有を開始できませんでした。もう一度お試しください。"}}
+async function shareWeekly(){const status=document.getElementById("share-weekly-status"),period=weeklyPeriod();if(!period?.complete){status.textContent="この期間はまだ7日間が終了していません。期間終了後に共有してください。";return;}const text=weeklyShareText();try{if(navigator.share){await navigator.share({title:"DLT SUPPORT｜週間サマリー",text});status.textContent="共有先の選択は端末側で行います。"}else if(navigator.clipboard){await navigator.clipboard.writeText(text);status.textContent="サマリーをコピーしました。メールやLINEに貼り付けて共有できます。"}else{status.textContent="この環境では共有機能を利用できません。"}}catch(e){if(e?.name!=="AbortError")status.textContent="共有を開始できませんでした。もう一度お試しください。"}}
 document.getElementById("weekly-notice-open").addEventListener("click",showWeekly);
 document.getElementById("weekly-notice-later").addEventListener("click",()=>{document.getElementById("weekly-notice").hidden=true;});document.getElementById("nav-history").addEventListener("click",showHistory);
 document.getElementById("nav-today").addEventListener("click",showHome);
@@ -667,7 +691,6 @@ document.getElementById("back-history").addEventListener("click",showHome);
 document.getElementById("open-weekly").addEventListener("click",showWeekly);
 document.getElementById("back-weekly").addEventListener("click",showHistory);
 document.getElementById("share-weekly").addEventListener("click",shareWeekly);
-document.getElementById("copy-weekly").addEventListener("click",async()=>{const status=document.getElementById("share-weekly-status"),text=weeklyShareText(),rows=weeklyData(),dltDays=rows.filter(x=>Number.isInteger(x.dlt?.dizziness)).length,careDays=rows.filter(x=>x.selfCare?.status==="done"||x.selfCare?.status==="not-done"||x.selfCare?.status==="no-instruction").length;if(dltDays===0&&careDays===0){status.textContent="DLT・セルフケアの記録がありません。コピーは実行していません。7日分のDLTプレビューを表示し直してください。";return;}try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text)}else{const box=document.createElement("textarea");box.value=text;box.setAttribute("readonly","");box.style.cssText="position:fixed;left:-9999px;top:0";document.body.appendChild(box);box.select();const ok=document.execCommand("copy");box.remove();if(!ok)throw Error("コピー不可");}status.textContent="共有文をコピーしました。DLT記録："+dltDays+"日／セルフケア記録："+careDays+"日。施設用アプリの入力欄でCtrl＋Vを押してください。";}catch(e){status.textContent="自動コピーできませんでした。共有先への送信は行っていません。";}});
 document.getElementById("finish-today").addEventListener("click",finishToday);
 updateWeeklyNotice();
 document.getElementById("saved-count").textContent=savedRecords().length;
