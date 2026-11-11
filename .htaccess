@@ -1,0 +1,7 @@
+# Client app HTML must be revalidated so Home Screen installs can see releases.
+# Static images, CSS, and JS retain their existing caching behavior.
+<IfModule mod_headers.c>
+  <Files "index.html">
+    Header always set Cache-Control "no-cache, max-age=0, must-revalidate"
+  </Files>
+</IfModule>
