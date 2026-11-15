@@ -697,7 +697,7 @@ async function shareWeekly(){
   if(navigator.share){
    await navigator.share({title:"DLT SUPPORT｜週間サマリー",text});
    status.textContent="共有操作が完了しました。";
-   markWeeklyNoticeChecked();
+   if(period.weekIndex===period.currentIndex-1)markWeeklyNoticeChecked();
   }else if(navigator.clipboard){
    await navigator.clipboard.writeText(text);
    status.textContent="サマリーをコピーしました。メールやLINEに貼り付けて共有できます。";
