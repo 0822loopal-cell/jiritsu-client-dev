@@ -15,6 +15,9 @@
   <script src="js/rppg.js" defer></script>
 <style>
 .field-required-label{display:inline-block;margin-left:.45em;padding:.12em .48em;border:1px solid #1b67ac;border-radius:5px;color:#155a9c;background:#e9f3ff;font-size:.72em;font-weight:700;vertical-align:middle}
+.field-optional-label{display:inline-block;margin-left:.45em;padding:.12em .48em;border:1px solid #8b96a2;border-radius:5px;color:#526171;background:#f0f2f4;font-size:.72em;font-weight:700;vertical-align:middle}
+.field-legend{font-size:.86rem;line-height:1.6;margin:.45rem 0 1rem}
+.field-legend .field-required-label,.field-legend .field-optional-label{margin-left:0;margin-right:.25em}
 </style>
 </head>
 <body data-app-version="0.1.17">
@@ -64,10 +67,10 @@
 
     <section id="step1-screen" class="screen">
       <header class="flow-head"><button id="back-home" class="back-button" type="button" aria-label="戻る">‹</button><div><p class="eyebrow">MORNING RECORD</p><h1>昨日・昨夜</h1></div><span class="step-count">1 / 4</span></header>
-      <div class="visual-step-progress" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div><p class="flow-intro">昨日の過ごし方と、昨夜の眠りを振り返ります。</p>
+      <div class="visual-step-progress" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div><p class="flow-intro">昨日の過ごし方と、昨夜の眠りを振り返ります。</p><p class="field-legend"><span class="field-required-label">必須</span> 入力が必要　<span class="field-optional-label">任意</span> 未入力でも進めます</p>
 
       <section class="card form-card">
-        <p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="m7 21 3-6 2-3 3 2 4 1M4 12l5-3 3 3m0 0-2 3m2-3 2-4 4 1"/></svg></span>YESTERDAY</p><h2>昨日の主な過ごし方</h2><p class="helper">いちばん近いものを1つ</p>
+        <p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="m7 21 3-6 2-3 3 2 4 1M4 12l5-3 3 3m0 0-2 3m2-3 2-4 4 1"/></svg></span>YESTERDAY</p><h2>昨日の主な過ごし方 <span class="field-required-label">必須</span></h2><p class="helper">いちばん近いものを1つ</p>
         <div class="choice-grid single" data-group="activity">
           <button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7M5 9v12h14V9M10 21v-7h4v7"/></svg></span><span class="choice-caption">普段通り</span></button><button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4M5 20l4-6 3-3 4 2 4 1M4 12l6-4 4 3m-2 1-1 5"/></svg></span><span class="choice-caption">運動した</span></button><button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4M4 12l6-4 4 3m-4 9 4-7 2-3 3 2 4 1"/></svg></span><span class="choice-caption">よく身体を動かした</span></button>
           <button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2 20v-2a6 6 0 0 1 12 0v2m1-6a5 5 0 0 1 7 4v2"/></svg></span><span class="choice-caption">趣味・外出</span></button><button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="13" rx="2"/><path d="M8 22h8M12 18v4"/></svg></span><span class="choice-caption">座っている時間が長かった</span></button><button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12v-2a3 3 0 0 1 6 0v2h6v-2a3 3 0 0 1 6 0v9H3v-7Zm0 3h18"/></svg></span><span class="choice-caption">ゆっくり過ごした</span></button>
@@ -76,16 +79,16 @@
 
       <section class="card form-card" id="self-care-daily-record">
         <p class="section-label">SELF CARE</p>
-        <h2>昨日のセルフケア・セルフリハ</h2>
+        <h2>昨日のセルフケア・セルフリハ <span class="field-optional-label">任意</span></h2>
         <p class="helper">自律調整院から案内されたセルフケアについて選んでください。未選択は未記録として扱います。</p>
-        <p class="field-title">実施状況</p>
+        <p class="field-title">実施状況 <span class="field-optional-label">任意</span></p>
         <div class="choice-grid single" data-group="self-care-status">
           <button type="button" data-care="done">実施した</button>
           <button type="button" data-care="not-done">実施しなかった</button>
           <button type="button" data-care="no-instruction">指示なし</button>
         </div>
         <div id="self-care-response-wrap" hidden>
-          <p class="field-title">実施後の状態</p>
+          <p class="field-title">実施後の状態 <span class="field-optional-label">任意</span></p>
           <div class="choice-grid single" data-group="self-care-response">
             <button type="button" data-care="better">楽になった</button>
             <button type="button" data-care="same">変わらない</button>
@@ -95,7 +98,7 @@
         </div>
       </section>
       <section class="card form-card">
-        <p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>DIFFERENCE</p><h2>いつもと違ったこと</h2><p class="helper">当てはまるものを選択できます</p>
+        <p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>DIFFERENCE</p><h2>いつもと違ったこと <span class="field-optional-label">任意</span></h2><p class="helper">当てはまるものを選択できます</p>
         <div class="choice-grid multi" data-group="unusual">
           <button type="button" data-none="true"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></span><span class="choice-caption">特になし</span></button>
           <button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M5 11v8M19 11v8M6 11V8a3 3 0 0 1 6 0v3M12 11V7a3 3 0 0 1 6 0v4"/></svg></span><span class="choice-caption">昼寝</span></button>
@@ -107,25 +110,25 @@
       </section>
 
       <section class="card form-card">
-        <p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15.3A8 8 0 0 1 8.7 4 8 8 0 1 0 20 15.3Z"/></svg></span>LAST NIGHT</p><h2>昨夜の睡眠</h2>
-        <p class="field-title">眠れた感じ</p>
+        <p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15.3A8 8 0 0 1 8.7 4 8 8 0 1 0 20 15.3Z"/></svg></span>LAST NIGHT</p><h2>昨夜の睡眠 <span class="field-required-label">必須</span></h2>
+        <p class="field-title">眠れた感じ <span class="field-required-label">必須</span></p>
         <div class="choice-grid single sleep-choice" data-group="sleep">
           <button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 10h.01M16 10h.01M8 15q4 4 8 0"/></svg></span><span class="choice-caption">よく眠れた</span></button><button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 10h.01M16 10h.01M8 15q4 3 8 0"/></svg></span><span class="choice-caption">まあ眠れた</span></button><button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 10h.01M16 10h.01M8 15h8"/></svg></span><span class="choice-caption">普通</span></button><button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 10h.01M16 10h.01M8 17q4-4 8 0"/></svg></span><span class="choice-caption">あまり眠れなかった</span></button><button type="button"><span class="choice-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 10h.01M16 10h.01M7 18q5-7 10 0"/></svg></span><span class="choice-caption">眠れなかった</span></button>
         </div>
-        <div class="time-fields"><label>ベッドに入った時刻<input type="time" id="bed-time"></label><label>起きた時刻<input type="time" id="wake-time"></label></div>
+        <div class="time-fields"><label>ベッドに入った時刻 <span class="field-required-label">必須</span><input type="time" id="bed-time"></label><label>起きた時刻 <span class="field-required-label">必須</span><input type="time" id="wake-time"></label></div>
       </section>
       <button class="primary-button next-button" type="button" disabled>次へ</button>
       <p class="time-note">次は「昨夜の寝室」です</p>
     </section>
     <section id="step2-screen" class="screen">
       <header class="flow-head"><button id="back-step1" class="back-button" type="button" aria-label="戻る">‹</button><div><p class="eyebrow">MORNING RECORD</p><h1>昨夜の寝室</h1></div><span class="step-count">2 / 4</span></header>
-      <div class="visual-step-progress" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i></div><p class="flow-intro">起きたときに確認した寝室の値を記録します。測れる項目だけで大丈夫です。</p>
+      <div class="visual-step-progress" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i></div><p class="flow-intro">起きたときに確認した寝室の値を記録します。測れる項目だけで大丈夫です。</p><p class="field-legend"><span class="field-required-label">必須</span> 入力が必要　<span class="field-optional-label">任意</span> 未入力でも進めます</p>
       <section class="card form-card env-card">
-        <p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14V5a3 3 0 0 1 6 0v9a5 5 0 1 1-6 0Z"/><path d="M13 9v8"/></svg></span>BEDROOM</p><h2>起床時の寝室環境</h2><p class="helper">入力は任意です</p>
+        <p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14V5a3 3 0 0 1 6 0v9a5 5 0 1 1-6 0Z"/><path d="M13 9v8"/></svg></span>BEDROOM</p><h2>起床時の寝室環境 <span class="field-optional-label">任意</span></h2><p class="helper">入力は任意です</p>
         <div class="env-fields">
-          <label class="env-field-row"><span class="env-field-icon temp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14V5a3 3 0 0 1 6 0v9a5 5 0 1 1-6 0Z"/><path d="M13 9v8"/></svg></span><span class="env-field-name">寝室の温度</span><div class="number-field"><input type="number" id="room-temp" inputmode="decimal" step="0.1" placeholder="--"><b>℃</b></div></label>
-          <label class="env-field-row"><span class="env-field-icon humidity" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C9 7 5 11 5 15a7 7 0 0 0 14 0c0-4-4-8-7-13Z"/><path d="M9 16a3 3 0 0 0 3 3"/></svg></span><span class="env-field-name">寝室の湿度</span><div class="number-field"><input type="number" id="room-humidity" inputmode="decimal" step="1" placeholder="--"><b>%</b></div></label>
-          <label class="env-field-row"><span class="env-field-icon co2" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18H5a4 4 0 0 1-.4-8A7.5 7.5 0 0 1 19 9a4.5 4.5 0 0 1 0 9h-2"/><text x="12" y="15" font-size="6" text-anchor="middle" fill="currentColor" stroke="none" font-weight="bold">CO₂</text></svg></span><span class="env-field-name">寝室のCO₂</span><div class="number-field"><input type="number" id="room-co2" inputmode="numeric" step="1" placeholder="--"><b>ppm</b></div></label>
+          <label class="env-field-row"><span class="env-field-icon temp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14V5a3 3 0 0 1 6 0v9a5 5 0 1 1-6 0Z"/><path d="M13 9v8"/></svg></span><span class="env-field-name">寝室の温度 <span class="field-optional-label">任意</span></span><div class="number-field"><input type="number" id="room-temp" inputmode="decimal" step="0.1" placeholder="--"><b>℃</b></div></label>
+          <label class="env-field-row"><span class="env-field-icon humidity" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C9 7 5 11 5 15a7 7 0 0 0 14 0c0-4-4-8-7-13Z"/><path d="M9 16a3 3 0 0 0 3 3"/></svg></span><span class="env-field-name">寝室の湿度 <span class="field-optional-label">任意</span></span><div class="number-field"><input type="number" id="room-humidity" inputmode="decimal" step="1" placeholder="--"><b>%</b></div></label>
+          <label class="env-field-row"><span class="env-field-icon co2" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18H5a4 4 0 0 1-.4-8A7.5 7.5 0 0 1 19 9a4.5 4.5 0 0 1 0 9h-2"/><text x="12" y="15" font-size="6" text-anchor="middle" fill="currentColor" stroke="none" font-weight="bold">CO₂</text></svg></span><span class="env-field-name">寝室のCO₂ <span class="field-optional-label">任意</span></span><div class="number-field"><input type="number" id="room-co2" inputmode="numeric" step="1" placeholder="--"><b>ppm</b></div></label>
         </div>
         <p class="env-note">数値の良し悪しはここでは判定しません。起きたときの値を、そのまま記録します。</p>
       </section>
@@ -135,16 +138,16 @@
 
     <section id="step3-screen" class="screen">
       <header class="flow-head"><button id="back-step2" class="back-button" type="button" aria-label="戻る">‹</button><div><p class="eyebrow">DAILY RECORD</p><h1>いまのわたし</h1></div><span class="step-count">3 / 4</span></header>
-      <div class="visual-step-progress" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><p class="flow-intro">測定の前に、現在のご自身の感覚を記録します。</p>
-      <section class="card form-card"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>CURRENT CONDITION</p><h2>いまのコンディション</h2><p class="helper">いちばん近いものを1つ</p>
+      <div class="visual-step-progress" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><p class="flow-intro">測定の前に、現在のご自身の感覚を記録します。</p><p class="field-legend"><span class="field-required-label">必須</span> 入力が必要　<span class="field-optional-label">任意</span> 未入力でも進めます</p>
+      <section class="card form-card"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>CURRENT CONDITION</p><h2>いまのコンディション <span class="field-required-label">必須</span></h2><p class="helper">いちばん近いものを1つ</p>
         <div class="choice-grid single condition-choices" data-group="morning-condition"><button type="button">とても良い</button><button type="button">まあ良い</button><button type="button">普通</button><button type="button">あまり良くない</button><button type="button" data-poor="true">良くない</button></div>
       </section>
-      <section class="card form-card"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3Z"/></svg></span>FEELING</p><h2>いま最も近い感じ</h2><p class="helper">任意・1つだけ選べます</p>
+      <section class="card form-card"><p class="section-label"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3Z"/></svg></span>FEELING</p><h2>いま最も近い感じ <span class="field-optional-label">任意</span></h2><p class="helper">任意・1つだけ選べます</p>
         <div class="choice-grid single" data-group="morning-feeling"><button type="button">いつも通り</button><button type="button">眠い</button><button type="button">身体が重い</button><button type="button">頭がスッキリしない</button><button type="button">気分が乗らない</button><button type="button">その他</button></div>
       </section>
       <section class="card form-card" id="dlt-daily-record">
         <p class="section-label">DLT SUPPORT</p>
-        <h2>今日の症状と生活への影響</h2>
+        <h2>今日の症状と生活への影響 <span class="field-required-label">必須</span></h2>
         <p class="helper">4項目すべて必須です。0＝負担なし、4＝負担が大きい。</p>
 
         <div class="dlt-rating">
@@ -191,7 +194,7 @@
           </div>
         </div>
       </section>
-<section id="safety-gate" class="card form-card safety-gate" hidden><p class="section-label"><span class="section-icon" aria-hidden="true">!</span>CHECK</p><h2>いつもと違う、強い不調がありますか？</h2>
+<section id="safety-gate" class="card form-card safety-gate" hidden><p class="section-label"><span class="section-icon" aria-hidden="true">!</span>CHECK</p><h2>いつもと違う、強い不調がありますか？ <span class="field-required-label">該当時必須</span></h2>
         <div class="choice-grid single" data-group="strong-symptom"><button type="button">ない</button><button type="button">ある</button></div>
       </section>
       <button class="primary-button" type="button" id="to-step4" disabled>次へ</button><p class="time-note">次は「rPPG測定」です</p>
@@ -199,9 +202,9 @@
 
     <section id="step4-screen" class="screen">
       <header class="flow-head"><button id="back-step3" class="back-button" type="button" aria-label="戻る">‹</button><div><p class="eyebrow">MORNING RECORD</p><h1>身体反応を測る</h1></div><span class="step-count">4 / 4</span></header>
-      <div class="visual-step-progress" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><p class="flow-intro">白い枠を額中央の皮膚に合わせ、できるだけ動かずに20秒間測定します。</p>
+      <div class="visual-step-progress" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><p class="flow-intro">白い枠を額中央の皮膚に合わせ、できるだけ動かずに20秒間測定します。</p><p class="field-legend"><span class="field-required-label">必須</span> 入力が必要　<span class="field-optional-label">任意</span> 未入力でも進めます</p>
       <section class="card form-card rppg-card">
-        <div class="camera-visual-heading"><span class="camera-visual-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h4l2-3h6l2 3h4v13H3Z"/><circle cx="12" cy="13" r="4"/></svg></span><div><strong>額の位置を合わせましょう</strong><p>カメラを起動したら、白い枠の中に額を合わせます。</p></div></div><div class="camera-checklist"><h2><span aria-hidden="true">♧</span> 測定のポイント</h2><ul><li>白い枠を額中央の皮膚に合わせてください。</li><li>できるだけ動かずに、約20秒間測定します。</li><li>顔に光が当たる明るい場所で行ってください。</li><li>メガネや前髪が額にかからないようにしてください。</li></ul></div><div id="camera-status" class="camera-status" role="status" aria-live="polite">カメラはまだ起動していません。</div>
+        <p class="field-legend"><span class="field-optional-label">任意</span> カメラ測定は省略できます</p><div class="camera-visual-heading"><span class="camera-visual-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h4l2-3h6l2 3h4v13H3Z"/><circle cx="12" cy="13" r="4"/></svg></span><div><strong>額の位置を合わせましょう</strong><p>カメラを起動したら、白い枠の中に額を合わせます。</p></div></div><div class="camera-checklist"><h2><span aria-hidden="true">♧</span> 測定のポイント</h2><ul><li>白い枠を額中央の皮膚に合わせてください。</li><li>できるだけ動かずに、約20秒間測定します。</li><li>顔に光が当たる明るい場所で行ってください。</li><li>メガネや前髪が額にかからないようにしてください。</li></ul></div><div id="camera-status" class="camera-status" role="status" aria-live="polite">カメラはまだ起動していません。</div>
         
         <canvas id="rppg-source" hidden></canvas>
         
