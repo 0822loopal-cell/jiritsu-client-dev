@@ -547,7 +547,7 @@ function showHistory(){
  else box.innerHTML=records.map(x=>{const m=x.morning?.condition||"未記録",s=x.sleep?.feeling||"未記録",r=x.rppg?.status==="valid"?`HR ${Math.round(x.rppg.hr)} / RMSSD ${Math.round(x.rppg.rmssd)} / SDNN ${Math.round(x.rppg.sdnn)}`:"測定なし・参考値";const score=v=>Number.isInteger(v)&&v>=0&&v<=4?String(v):"未記録";const d=x.dlt||{};return `<div style="padding:12px 0;border-bottom:1px solid #eee"><strong>${formatRecordDate(x.recordedAt)}</strong><p class="today-copy">睡眠：${s}<br>記録時：${m}<br>めまい：${score(d.dizziness)} / ふらつき：${score(d.unsteadiness)}<br>耳鳴り：${score(d.tinnitus)} / 日常生活への影響：${score(d.dailyImpact)}<br>カメラ：${r}</p></div>`}).join("");
  window.scrollTo(0,0);
 }
-const WEEKLY_NOTICE_KEY=STORAGE_KEY+"__weeklyNotice";
+const WEEKLY_NOTICE_KEY=STORAGE_KEY+"__weeklyShared";
 
 function weeklyNoticeState(){
  const records=[...savedRecords()]
@@ -661,7 +661,6 @@ function showWeekly(){
  document.getElementById("weekly-screen").classList.add("active");
  nav.hidden=false;
  renderWeekly();
- markWeeklyNoticeChecked();
  window.scrollTo(0,0);
 }
 function weeklyDailyPayload(){
@@ -690,7 +689,22 @@ function weeklyShareText(){
  const daily=weeklyDailyPayload();
  return ["DLT SUPPORT｜週間サマリー",meta.join("\n"),"① 記録状況\n"+x.record,"② 生活と体感の推移\n"+x.life,"③ DLT｜症状と生活への影響\n"+x.dlt,"④ セルフケア・セルフリハ\n"+x.selfCare,"⑤ カメラ測定値\n"+x.camera ,...(daily?["⑧ 日別データ（アプリ連携用）\n"+JSON.stringify(daily)]:[])].join("\n\n");
 }
-async function shareWeekly(){const status=document.getElementById("share-weekly-status"),period=weeklyPeriod();if(!period?.complete){status.textContent="この期間はまだ7日間が終了していません。期間終了後に共有してください。";return;}const text=weeklyShareText();try{if(navigator.share){await navigator.share({title:"DLT SUPPORT｜週間サマリー",text});status.textContent="共有先の選択は端末側で行います。"}else if(navigator.clipboard){await navigator.clipboard.writeText(text);status.textContent="サマリーをコピーしました。メールやLINEに貼り付けて共有できます。"}else{status.textContent="この環境では共有機能を利用できません。"}}catch(e){if(e?.name!=="AbortError")status.textContent="共有を開始できませんでした。もう一度お試しください。"}}
+async function shareWeekly(){
+ const status=document.getElementById("share-weekly-status"),period=weeklyPeriod();
+ if(!period?.complete){status.textContent="この期間はまだ7日間が終了していません。期間終了後に共有してください。";return;}
+ const text=weeklyShareText();
+ try{
+  if(navigator.share){
+   await navigator.share({title:"DLT SUPPORT｜週間サマリー",text});
+   status.textContent="共有操作が完了しました。";
+   markWeeklyNoticeChecked();
+  }else if(navigator.clipboard){
+   await navigator.clipboard.writeText(text);
+   status.textContent="サマリーをコピーしました。メールやLINEに貼り付けて共有できます。";
+  }else{status.textContent="この環境では共有機能を利用できません。";}
+ }catch(e){if(e?.name!=="AbortError")status.textContent="共有を開始できませんでした。もう一度お試しください。"}
+}
+
 document.getElementById("weekly-notice-open").addEventListener("click",showWeekly);
 document.getElementById("weekly-notice-later").addEventListener("click",()=>{document.getElementById("weekly-notice").hidden=true;});document.getElementById("nav-history").addEventListener("click",showHistory);
 document.getElementById("nav-today").addEventListener("click",showHome);
@@ -915,8 +929,8 @@ async function checkForAppUpdate(){
  }catch(e){/* Offline or transient network issues must not block recording. */}
  finally{clearTimeout(timer);clientUpdateBusy=false;}
 }
-window.addEventListener("pageshow",()=>{setTimeout(checkForAppUpdate,500);});
-document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")setTimeout(checkForAppUpdate,400);});
+window.addEventListener("pageshow",()=>{setTimeout(checkForAppUpdate,500);setTimeout(updateWeeklyNotice,500);});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){setTimeout(checkForAppUpdate,400);setTimeout(updateWeeklyNotice,400);}});
 // Brief button feedback for touch and mouse; existing actions and data remain unchanged.
 document.addEventListener("click",event=>{
  const button=event.target.closest?.("button");
