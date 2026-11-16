@@ -18,6 +18,14 @@
 .field-optional-label{display:inline-block;margin-left:.45em;padding:.12em .48em;border:1px solid #8b96a2;border-radius:5px;color:#526171;background:#f0f2f4;font-size:.72em;font-weight:700;vertical-align:middle}
 .field-legend{font-size:.86rem;line-height:1.6;margin:.45rem 0 1rem}
 .field-legend .field-required-label,.field-legend .field-optional-label{margin-left:0;margin-right:.25em}
+.weekly-bedroom-details{margin-top:16px;border-top:1px solid #dce7ee;padding-top:14px}
+.weekly-bedroom-details summary{cursor:pointer;color:#125b96;font-weight:700;line-height:1.6;padding:4px 0}
+.weekly-bedroom-details .helper{margin:9px 0;font-size:12px;line-height:1.6}
+.weekly-bedroom-day{padding:11px 0;border-bottom:1px solid #e7edf3;font-size:13px;line-height:1.6}
+.weekly-bedroom-day:last-child{border-bottom:0}
+.weekly-bedroom-day strong{font-weight:700;color:#254b72}
+.weekly-bedroom-day p{margin:3px 0 0;overflow-wrap:anywhere}
+.weekly-bedroom-day p:last-child{color:#56687a}
 </style>
 </head>
 <body data-app-version="0.1.17">
@@ -238,7 +246,13 @@
       <header class="flow-head"><button id="back-weekly" class="back-button" type="button" aria-label="戻る">‹</button><div><p class="eyebrow">WEEKLY</p><h1>週間サマリー</h1></div></header>
       <p class="flow-intro">初回記録日を起点に、7日ずつ区切って振り返ります。記録がない日は推測で補いません。</p><div class="card today-card"><label for="weekly-period-select" style="display:block;font-weight:700;margin-bottom:8px">集計期間を選ぶ</label><select id="weekly-period-select" style="width:100%;min-height:48px;font:inherit;padding:8px;border:1px solid #a8c7df;border-radius:8px;background:#fff"></select><p id="weekly-period-note" class="today-copy" style="margin-top:10px"></p></div>
       <section class="card today-card"><p class="section-label">01 RECORD</p><h2>記録状況</h2><p id="weekly-record" class="today-copy"></p></section>
-      <section class="card today-card"><p class="section-label">02 LIFE & FEELING</p><h2>生活と体感の推移</h2><p id="weekly-life" class="today-copy"></p></section>
+      <section class="card today-card"><p class="section-label">02 LIFE & FEELING</p><h2>生活と体感の推移</h2><p id="weekly-life" class="today-copy"></p>
+        <details class="weekly-bedroom-details" id="weekly-bedroom-details">
+          <summary>睡眠・体調・寝室環境を日別に比較</summary>
+          <p class="helper">記録日ごとの「昨夜の睡眠」と起床時の寝室環境です。未入力は「—」で表示します。</p>
+          <div id="weekly-bedroom-days"></div>
+        </details>
+      </section>
       <section class="card today-card"><p class="section-label">03 DLT SUPPORT</p><h2>症状と生活への影響</h2><p id="weekly-dlt" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">04 SELF CARE</p><h2>セルフケア・セルフリハ</h2><p id="weekly-self-care" class="today-copy"></p></section>
       <section class="card today-card"><p class="section-label">05 CAMERA</p><h2>カメラ測定値</h2><p id="weekly-camera" class="today-copy"></p></section>
@@ -539,13 +553,20 @@ function finishToday(){
  showHome();
 }
 function hideMainScreens(){[home,step1,step2,step3,step4,todayScreen,document.getElementById("history-screen"),document.getElementById("weekly-screen")].forEach(x=>x?.classList.remove("active"))}
+function bedroomValue(value,unit){
+ return typeof value==="number"&&Number.isFinite(value)?String(value)+unit:"—";
+}
+function bedroomBrief(record){
+ const room=record?.bedroom||{};
+ return "寝室："+bedroomValue(room.temperature?.value,"℃")+" / "+bedroomValue(room.humidity?.value,"%")+" / "+bedroomValue(room.co2?.value,"ppm");
+}
 function formatRecordDate(x){const d=new Date(x);return Number.isNaN(d.getTime())?"日時不明":`${d.getMonth()+1}月${d.getDate()}日`}
 function showHistory(){
  window.stopRppgCamera?.();hideMainScreens();document.getElementById("history-screen").classList.add("active");nav.hidden=false;
  const records=[...savedRecords()].sort((a,b)=>Date.parse(b.recordedAt)-Date.parse(a.recordedAt));
  const box=document.getElementById("history-list");
  if(!records.length){box.innerHTML='<p class="today-copy">まだ保存された記録はありません。</p>'}
- else box.innerHTML=records.map(x=>{const m=x.morning?.condition||"未記録",s=x.sleep?.feeling||"未記録",r=x.rppg?.status==="valid"?`HR ${Math.round(x.rppg.hr)} / RMSSD ${Math.round(x.rppg.rmssd)} / SDNN ${Math.round(x.rppg.sdnn)}`:"測定なし・参考値";const score=v=>Number.isInteger(v)&&v>=0&&v<=4?String(v):"未記録";const d=x.dlt||{};return `<div style="padding:12px 0;border-bottom:1px solid #eee"><strong>${formatRecordDate(x.recordedAt)}</strong><p class="today-copy">睡眠：${s}<br>記録時：${m}<br>めまい：${score(d.dizziness)} / ふらつき：${score(d.unsteadiness)}<br>耳鳴り：${score(d.tinnitus)} / 日常生活への影響：${score(d.dailyImpact)}<br>カメラ：${r}</p></div>`}).join("");
+ else box.innerHTML=records.map(x=>{const m=x.morning?.condition||"未記録",s=x.sleep?.feeling||"未記録",r=x.rppg?.status==="valid"?`HR ${Math.round(x.rppg.hr)} / RMSSD ${Math.round(x.rppg.rmssd)} / SDNN ${Math.round(x.rppg.sdnn)}`:"測定なし・参考値";const score=v=>Number.isInteger(v)&&v>=0&&v<=4?String(v):"未記録";const d=x.dlt||{};return `<div style="padding:12px 0;border-bottom:1px solid #eee"><strong>${formatRecordDate(x.recordedAt)}</strong><p class="today-copy">睡眠：${s}<br>記録時：${m}<br>めまい：${score(d.dizziness)} / ふらつき：${score(d.unsteadiness)}<br>耳鳴り：${score(d.tinnitus)} / 日常生活への影響：${score(d.dailyImpact)}<br>${bedroomBrief(x)}<br>カメラ：${r}</p></div>}).join("");
  window.scrollTo(0,0);
 }
 const WEEKLY_NOTICE_KEY=STORAGE_KEY+"__weeklyDecision";
@@ -636,6 +657,33 @@ function weeklySummaryText(){
   const selfCare=`実施した ${statuses.done}日 / 実施しなかった ${statuses["not-done"]}日 / 指示なし ${statuses["no-instruction"]}日 / 未記録 ${statuses.missing}日。実施後の状態：楽になった ${responses.better}日 / 変わらない ${responses.same}日 / 気になる変化があった ${responses.change}日 / 未記録 ${responses.missing}日。記録のない日は補完していません。`;
   return {record,life,dlt,selfCare,camera};
 }
+function renderWeeklyBedroomDays(){
+ const container=document.getElementById("weekly-bedroom-days");
+ const p=weeklyPeriod();
+ container.replaceChildren();
+ if(!p)return;
+ const entries=new Map();
+ for(const record of weeklyData()){
+  const date=new Date(record.recordedAt);
+  const day=Math.floor(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())/86400000);
+  if(!entries.has(day))entries.set(day,record);
+ }
+ for(let offset=0;offset<7;offset++){
+  const day=p.startDay+offset;
+  const date=new Date(day*86400000);
+  const record=entries.get(day);
+  const line=document.createElement("div");
+  line.className="weekly-bedroom-day";
+  const heading=document.createElement("strong");
+  heading.textContent=(date.getUTCMonth()+1)+"/"+date.getUTCDate()+(record?"":"（未記録）");
+  const feeling=document.createElement("p");
+  feeling.textContent="睡眠："+(record?.sleep?.feeling||"—")+"　体調："+(record?.morning?.condition||"—");
+  const room=document.createElement("p");
+  room.textContent=record?bedroomBrief(record):"寝室：— / — / —";
+  line.append(heading,feeling,room);
+  container.append(line);
+ }
+}
 function renderWeekly(){
  const x=weeklySummaryText(),p=weeklyPeriod(),select=document.getElementById("weekly-period-select"),note=document.getElementById("weekly-period-note"),share=document.getElementById("share-weekly");
  select.replaceChildren();
@@ -652,6 +700,7 @@ function renderWeekly(){
  share.textContent=p?.complete?"この7日間のサマリーを共有する ›":"7日間が終了すると共有できます";
  document.getElementById("weekly-record").textContent=x.record;
  document.getElementById("weekly-life").textContent=x.life;
+ renderWeeklyBedroomDays();
  document.getElementById("weekly-dlt").textContent=x.dlt;
  document.getElementById("weekly-self-care").textContent=x.selfCare;
  document.getElementById("weekly-camera").textContent=x.camera;
